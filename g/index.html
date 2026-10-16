@@ -935,7 +935,12 @@
     // Copy player link
     document.getElementById('copy-player-link-btn').addEventListener('click', () => {
       if (!currentGeneratedVideo) return;
-      const playerUrl = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, '')}//v/?id=${encodeURIComponent(currentGeneratedVideo.id)}`;
+      // Player page lives at the site root: https://twig.biz.id/v/?id=...
+      // (NOT /g/v/ — the /g/ directory is just the generator studio).
+      const rawUrl = `${window.location.origin}/v/?id=${encodeURIComponent(currentGeneratedVideo.id)}`;
+      // Defensive: collapse any accidental double slashes (// or ///) into a
+      // single slash, but preserve the "://" right after the protocol.
+      const playerUrl = rawUrl.replace(/([^:])\/{2,}/g, '$1/');
       navigator.clipboard.writeText(playerUrl).then(() => {
         if (window.showToast) window.showToast('Tautan Pemutar Berhasil Disalin!');
       });
