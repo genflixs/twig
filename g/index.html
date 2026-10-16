@@ -490,10 +490,6 @@
             <span>PRIVATE OWNER STUDIO</span>
           </div>
           <h1 class="gen-title">Generator Video &amp; Pembuat Postingan Baru</h1>
-          <p class="gen-subtitle">
-            Ubah link stream (contoh Videy <code>https://cdn.videy.co/Ky4smNE51.mp4</code>) secara instan menjadi player web ini: <code>//v/?id=Ky4smNE51</code> lengkap dengan thumbnail branded resmi dan kode untuk <code>assets/js/videos.js</code>.
-          </p>
-
           <!-- Quick Example Chips -->
           <div class="example-chips">
             <span style="font-size:0.75rem;color:var(--text-dim);font-weight:600;">Contoh Cepat:</span>
@@ -626,8 +622,6 @@
             <!-- Rendered dynamically -->
           </div>
         </div>
-
-        <!-- Code Snippet for GitHub Permanence -->
         <div>
           <label class="form-label" style="font-size:0.82rem;color:#cbd5e1;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;">
             <span>Kode Objek untuk Disalin ke <code>assets/js/videos.js</code>:</span>
@@ -663,56 +657,14 @@
               Sistem StreamPulse sudah mendukung <strong>Dynamic Instant Player</strong>. Anda tidak perlu mengedit file apapun! Cukup gunakan URL player dengan ID Videy:
             </p>
             <div style="background:#090d18;border:1px solid var(--border-subtle);padding:10px 14px;border-radius:6px;font-family:monospace;color:#38bdf8;margin:8px 0;font-size:0.85rem;word-break:break-all;">
-              https://domain-anda.github.io//v/?id=Ky4smNE51
+              https://domain.com/v/?id=Ky4smNE51
             </div>
             <p>
               Ketika pengunjung membuka tautan ini, web langsung memutar video dari Videy CDN secara otomatis dengan tombol Download HD, link VIP Telegram, Adsterra iklan, dan thumbnail branded resmi!
             </p>
           </div>
         </div>
-
-        <div class="guide-step">
-          <div class="guide-step-num">2</div>
-          <div class="guide-step-body">
-            <h4>Metode 2: Tambah Permanen ke Katalog Web (<code>assets/js/videos.js</code>)</h4>
-            <p>
-              Agar video Anda muncul di halaman Beranda (Featured/Latest/Popular) dan bisa dicari oleh semua pengunjung:
-            </p>
-            <ol style="margin-left:20px;color:var(--text-muted);font-size:0.83rem;line-height:1.7;">
-              <li>Isi link video Anda di form generator di atas, lalu klik <strong>Generate</strong>.</li>
-              <li>Klik tombol <strong>Salin Kode</strong> pada kotak abu-abu di atas.</li>
-              <li>Buka repository GitHub Anda di browser (bisa dari HP atau laptop).</li>
-              <li>Buka file <code>assets/js/videos.js</code>.</li>
-              <li>Klik ikon pensil <strong>Edit this file</strong>.</li>
-              <li>Cari baris <code>const VIDEOS_DATA = [</code> (di bagian atas file).</li>
-              <li>Tempel (paste) kode yang baru disalin tepat setelah tanda kurung siku buka <code>[</code>.</li>
-              <li>Klik tombol hijau <strong>Commit changes</strong> di pojok kanan atas.</li>
-              <li><strong>Selesai!</strong> Dalam 1-2 menit GitHub Pages akan memperbarui web secara otomatis.</li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="guide-step">
-          <div class="guide-step-num">3</div>
-          <div class="guide-step-body">
-            <h4>Tentang Thumbnail Khusus Beridentitas Web</h4>
-            <p>
-              Semua video di web ini otomatis menggunakan <strong>Branded Vector Thumbnail</strong> beresolusi 640x360 dengan:
-            </p>
-            <ul style="margin-left:20px;color:var(--text-muted);font-size:0.83rem;line-height:1.6;">
-              <li>Warna tema gelap hitam &amp; aksen neon pink/violet khas StreamPulse.</li>
-              <li>Logo pill <code>STREAMPULSE</code> di sudut kiri atas.</li>
-              <li>Badge kategori &amp; resolusi <code>1080P HD</code> di sudut kanan atas.</li>
-              <li>Ikon glowing play di bagian tengah.</li>
-              <li>Judul video dan ID di bilah bawah.</li>
-            </ul>
-            <p style="margin-top:6px;">
-              Jika Anda ingin membuat file <code>.svg</code> tersendiri, Anda bisa mengklik <strong>Download File SVG</strong> di atas lalu menyimpannya ke folder <code>assets/images/</code>. Atau cukup biarkan field thumbnail kosong, dan web akan membuatnya secara otomatis!
-            </p>
-          </div>
-        </div>
       </section>
-
     </div>
   </main>
 
@@ -936,7 +888,6 @@
         livePlayerBox.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;">Format stream siap diputar di halaman /v/</div>';
       }
 
-      // 3. Code Snippet for GitHub videos.js
       const codeString = `  {
     id: '${video.id}',
     slug: '${video.slug}',
