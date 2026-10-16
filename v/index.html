@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Watch Video - StreamPulse HD Player</title>
+  <meta name="description" content="Watch high-definition streaming video on StreamPulse. Mobile-first player with fast loading and multi-source playback." />
+  <meta property="og:title" content="Watch Video - StreamPulse HD Player" />
+  <meta property="og:description" content="Watch high-definition streaming video on StreamPulse with responsive playback." />
+  <meta property="og:type" content="video.other" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#070a12" />
+  <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+<body>
+
+  <!-- Top Sticky Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open Navigation Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <a href="/" class="brand-logo" aria-label="StreamPulse Home">
+          <img src="/assets/images/logo.svg" alt="StreamPulse Logo" width="160" height="34" />
+        </a>
+      </div>
+
+      <!-- Desktop Nav -->
+      <nav class="desktop-nav" aria-label="Main Navigation">
+        <a href="/" class="nav-link" data-i18n="nav_home">Home</a>
+        <a href="/pop/" class="nav-link" data-i18n="nav_popular">Popular</a>
+        <a href="/l/" class="nav-link" data-i18n="nav_latest">Latest</a>
+        <a href="/c/" class="nav-link" data-i18n="nav_categories">Categories</a>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="header-actions">
+        <!-- Desktop Search Box -->
+        <div class="search-box-wrapper">
+          <form class="search-form" action="/l/" method="GET">
+            <input 
+              type="search" 
+              name="q" 
+              class="search-input" 
+              placeholder="Search videos..." 
+              data-i18n-placeholder="search_placeholder" 
+            />
+            <button type="submit" class="search-icon-btn" aria-label="Execute search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+          </form>
+        </div>
+
+        <button id="mobile-search-toggle" class="mobile-search-toggle" aria-label="Toggle Search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+
+        <div class="lang-selector">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="id">ID</button>
+        </div>
+        </div>
+    </div>
+  </header>
+
+  <!-- Mobile Search Bar -->
+  <div id="mobile-search-bar" class="mobile-search-bar">
+    <form class="search-form" action="/l/" method="GET">
+      <input 
+        type="search" 
+        name="q" 
+        class="search-input" 
+        placeholder="Search videos, tags, categories..." 
+        data-i18n-placeholder="search_placeholder" 
+      />
+    </form>
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div id="drawer-backdrop" class="drawer-backdrop"></div>
+  <aside id="mobile-drawer" class="mobile-drawer" aria-label="Mobile Drawer Navigation">
+    <div class="drawer-header">
+      <img src="/assets/images/logo.svg" alt="StreamPulse" height="28" />
+      <button id="drawer-close-btn" class="drawer-close-btn" aria-label="Close navigation">&times;</button>
+    </div>
+    <nav class="drawer-links">
+      <a href="/" class="drawer-link" data-i18n="nav_home">Home</a>
+      <a href="/pop/" class="drawer-link" data-i18n="nav_popular">Popular</a>
+      <a href="/l/" class="drawer-link" data-i18n="nav_latest">Latest</a>
+      <a href="/c/" class="drawer-link" data-i18n="nav_categories">Categories</a>
+      <hr style="border:none;border-top:1px solid var(--border-subtle);margin:8px 0;" />
+      <a href="/a/" class="drawer-link" data-i18n="nav_about">About</a>
+      <a href="/ct/" class="drawer-link" data-i18n="nav_contact">Contact</a>
+      <a href="/pr/" class="drawer-link" data-i18n="nav_privacy">Privacy Policy</a>
+      <a href="/t/" class="drawer-link" data-i18n="nav_terms">Terms of Service</a>
+    </nav>
+  </aside>
+
+  <!-- Player Page Main Content -->
+  <main class="main-content">
+    <div class="container player-page-container" id="player-main-wrapper">
+
+      <!-- 1. RANDOM ARTICLE RECOMMENDATION (ABOVE PLAYER) -->
+      <section id="random-article-container" aria-label="Recommended Insight"></section>
+
+      <!-- 2. MAIN 16:9 VIDEO PLAYER -->
+      <section class="player-wrapper" aria-label="Video Player">
+        <div id="player-container" style="width:100%;height:100%;">
+          <!-- Rendered dynamically by player.js -->
+        </div>
+
+        <!-- 3. IN-PLAYER TIMED AD OVERLAY (shows ~10s into playback) -->
+        <div id="player-ad-overlay" class="in-player-ad-overlay"></div>
+      </section>
+
+      <!-- 4. ADSTERRA BANNER BELOW PLAYER -->
+      <div id="ad-below-player"></div>
+
+      <!-- 5. PROMINENT ACTION BUTTONS (Download HD & Join Private) -->
+      <section id="action-buttons-container" class="action-buttons-group" aria-label="Video Actions"></section>
+
+      <!-- VIDEO DETAILS BLOCK -->
+      <section class="video-details-card" aria-label="Video Metadata">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+          <h1 id="video-details-title" class="video-details-title">Loading video title...</h1>
+          <button id="video-share-btn" class="export-zip-badge" aria-label="Share video" style="flex-shrink:0;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+            <span data-i18n="share">Share</span>
+          </button>
+        </div>
+        <div id="video-details-meta" class="video-details-meta"></div>
+        <p id="video-details-desc" class="video-details-desc"></p>
+        <div id="video-details-tags" class="video-tags-list"></div>
+      </section>
+
+      <!-- 6. CONTINUED ARTICLES / EDITORIAL INSIGHTS -->
+      <section id="continued-articles" aria-labelledby="continued-articles-heading" style="margin-top:28px;">
+        <div class="section-header">
+          <h2 id="continued-articles-heading" class="section-title">
+            <span class="section-title-icon">&#128218;</span>
+            <span data-i18n="continue_reading">Continue Reading & Insights</span>
+          </h2>
+        </div>
+        <div id="continued-articles-list" class="articles-list"></div>
+        <div id="ad-articles-slot"></div>
+      </section>
+
+      <!-- 7. MORE VIDEOS (RECOMMENDED) -->
+      <section aria-labelledby="more-videos-heading" style="margin-top:32px;">
+        <div class="section-header">
+          <h2 id="more-videos-heading" class="section-title">
+            <span class="section-title-icon">&#127916;</span>
+            <span data-i18n="more_videos">More Like This</span>
+          </h2>
+        </div>
+        <div id="more-videos-grid" class="video-grid"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Navigation Thumb Bar -->
+  <nav class="bottom-nav" aria-label="Mobile Bottom Navigation">
+    <a href="/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span data-i18n="nav_home">Home</span>
+    </a>
+    <a href="/pop/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+      </svg>
+      <span data-i18n="nav_popular">Popular</span>
+    </a>
+    <a href="/l/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      <span data-i18n="nav_latest">Latest</span>
+    </a>
+    <a href="/c/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span data-i18n="nav_categories">Categories</span>
+    </a>
+  </nav>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div id="ad-footer-slot"></div>
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/assets/images/logo.svg" alt="StreamPulse" width="160" height="34" />
+          <p data-i18n="footer_desc">
+            StreamPulse is a lightweight, mobile-first video streaming platform designed for static hosting on GitHub Pages with Adsterra integration.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-heading" data-i18n="quick_links">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="/" class="footer-link" data-i18n="nav_home">Home</a></li>
+            <li><a href="/pop/" class="footer-link" data-i18n="nav_popular">Popular Videos</a></li>
+            <li><a href="/l/" class="footer-link" data-i18n="nav_latest">Latest Uploads</a></li>
+            <li><a href="/c/" class="footer-link" data-i18n="nav_categories">Categories</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading" data-i18n="legal">Legal & Info</h4>
+          <ul class="footer-links">
+            <li><a href="/a/" class="footer-link" data-i18n="nav_about">About Us</a></li>
+            <li><a href="/ct/" class="footer-link" data-i18n="nav_contact">Contact</a></li>
+            <li><a href="/pr/" class="footer-link" data-i18n="nav_privacy">Privacy Policy</a></li>
+            <li><a href="/t/" class="footer-link" data-i18n="nav_terms">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>&copy; 2026 StreamPulse. <span data-i18n="all_rights_reserved">All rights reserved.</span></div>
+        <div><span data-i18n="developed_for">Built for GitHub Pages</span> &bull; 100% Static Web Ready</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <!-- Site config (must be defined before player.js loads) -->
+  <script>
+    window.SITE_CONFIG = {
+      // Smartlink interstitial — both Download HD and Join VIP buttons wrap
+      // their destination URL through this URL before opening in a new tab.
+      smartlinkUrl: 'https://uplcm.com/4/10180725'
+    };
+    window.SMARTLINK_URL = 'https://uplcm.com/4/10180725';
+  </script>
+  <script src="/assets/js/i18n.js"></script>
+  <script src="/assets/js/ads.js"></script>
+  <script src="/assets/js/videos.js"></script>
+  <script src="/assets/js/player.js"></script>
+  <script src="/assets/js/app.js"></script>
+
+  <!-- Histats visitor counter (player page only) -->
+  <script type="text/javascript">
+    (function () {
+      var _Hasync = _Hasync || [];
+      _Hasync.push(['Histats.start', '1,4913033,4,0,0,0,00010000']);
+      _Hasync.push(['Histats.fasi', '1']);
+      _Hasync.push(['Histats.track_hits', '']);
+      var hs = document.createElement('script');
+      hs.type = 'text/javascript';
+      hs.async = true;
+      hs.src = ('//s10.histats.com/js15_as.js');
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+    })();
+  </script>
+  <!-- Histats tracker is invisible (counter ID 4 = hidden mode). It logs page views
+       for the player page only — no visible widget is rendered. -->
+</body>
+</html>

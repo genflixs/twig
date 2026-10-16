@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="referrer" content="no-referrer" />
+  <title>StreamPulse Studio - Panel Generator Video Rahasia</title>
+  <!-- Sembunyikan halaman ini dari mesin pencari dan publik -->
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="theme-color" content="#070a12" />
+  <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <style>
+    /* Security Overlay */
+    .security-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 10, 18, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .security-modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 32px 24px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow-lg), 0 0 40px rgba(139, 92, 246, 0.15);
+      animation: fadeInPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .security-icon-wrap {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #f87171;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .security-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    .security-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .security-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: #ffffff;
+      padding: 12px 16px;
+      font-size: 1rem;
+      text-align: center;
+      letter-spacing: 2px;
+      font-family: monospace;
+      margin-bottom: 14px;
+      transition: all 0.2s;
+    }
+    .security-input:focus {
+      outline: none;
+      border-color: var(--accent-secondary);
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+    }
+    .security-btn {
+      width: 100%;
+      background: var(--accent-gradient);
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.2s;
+      margin-bottom: 10px;
+    }
+    .security-btn:hover {
+      transform: translateY(-2px);
+    }
+    .security-back-btn {
+      width: 100%;
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      padding: 10px;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+    }
+
+    /* Generator Dashboard Styling */
+    .gen-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+    }
+    .gen-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      color: var(--accent-secondary);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      margin-bottom: 10px;
+    }
+    .gen-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+    .gen-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .example-chips {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      margin-bottom: 18px;
+    }
+    .example-chip {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 0.76rem;
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: monospace;
+    }
+    .example-chip:hover {
+      border-color: var(--accent-primary);
+      color: #ffffff;
+      background: rgba(255, 51, 102, 0.1);
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 6px;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      padding: 11px 14px;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--accent-secondary);
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.25);
+    }
+    .gen-submit-btn {
+      width: 100%;
+      background: var(--accent-gradient);
+      color: #ffffff;
+      border: none;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(255, 51, 102, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .gen-submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(255, 51, 102, 0.5);
+    }
+
+    /* Result Box */
+    .result-box {
+      display: none;
+      background: linear-gradient(145deg, #0e1526 0%, #171d33 100%);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+    .result-box.active {
+      display: block;
+      animation: fadeInPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .result-url-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #090d18;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 11px 14px;
+      margin-top: 10px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+    }
+    .result-url-text {
+      font-family: monospace;
+      font-size: 0.95rem;
+      color: #38bdf8;
+      font-weight: 700;
+      flex: 1;
+      white-space: nowrap;
+    }
+    .action-btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .sub-action-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .sub-action-btn.primary {
+      background: var(--accent-green-gradient);
+      color: #ffffff;
+    }
+    .sub-action-btn.secondary {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+    }
+    .sub-action-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Embedded Live Player Preview */
+    .player-preview-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      background: #000000;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-subtle);
+    }
+    .player-preview-wrapper video,
+    .player-preview-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Branded Thumbnail Studio */
+    .thumb-studio-box {
+      background: #080b15;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .thumb-preview-img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius-sm);
+      display: block;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #000;
+    }
+
+    .code-preview-box {
+      background: #070912;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      position: relative;
+    }
+    .code-preview-box pre {
+      color: #a5b4fc;
+      font-family: monospace;
+      font-size: 0.78rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin: 0;
+    }
+    .copy-code-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-code-btn:hover {
+      color: #ffffff;
+      border-color: var(--accent-primary);
+    }
+    .guide-step {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 18px;
+      align-items: flex-start;
+    }
+    .guide-step-num {
+      width: 30px;
+      height: 30px;
+      border-radius: var(--radius-full);
+      background: var(--accent-gradient);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .guide-step-body h4 {
+      font-size: 0.95rem;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+    .guide-step-body p {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Security Lock Overlay (Modal PIN Khusus Pemilik) -->
+  <div id="security-overlay" class="security-overlay">
+    <div class="security-modal">
+      <div class="security-icon-wrap">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+      <h2 class="security-title">StreamPulse Studio</h2>
+      <p class="security-desc">
+        Halaman ini disembunyikan agar tidak disalahgunakan orang lain. Masukkan PIN Admin Anda untuk membuka generator.
+      </p>
+      <form id="pin-form">
+        <input 
+          type="password" 
+          id="pin-input" 
+          class="security-input" 
+          placeholder="PIN Admin (Default: admin123)" 
+          autocomplete="current-password" 
+          required 
+          autofocus 
+        />
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;font-size:0.8rem;color:var(--text-muted);">
+          <input type="checkbox" id="remember-pin" checked />
+          <label for="remember-pin">Ingat saya di perangkat ini</label>
+        </div>
+        <button type="submit" class="security-btn">Buka Generator</button>
+        <a href="/" class="security-back-btn">&larr; Kembali ke Beranda Publik</a>
+      </form>
+    </div>
+  </div>
+
+  <!-- Top Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open Navigation Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <a href="/" class="brand-logo" aria-label="StreamPulse Home">
+          <img src="/assets/images/logo.svg" alt="StreamPulse Logo" width="160" height="34" />
+        </a>
+      </div>
+
+      <nav class="desktop-nav" aria-label="Main Navigation">
+        <a href="/" class="nav-link" data-i18n="nav_home">Home</a>
+        <a href="/pop/" class="nav-link" data-i18n="nav_popular">Popular</a>
+        <a href="/l/" class="nav-link" data-i18n="nav_latest">Latest</a>
+        <a href="/c/" class="nav-link" data-i18n="nav_categories">Categories</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="lock-studio-btn" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;padding:5px 12px;border-radius:9999px;font-size:0.75rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          Kunci Panel
+        </button>
+        <div class="lang-selector">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <button class="lang-btn active" data-lang="id">ID</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div id="drawer-backdrop" class="drawer-backdrop"></div>
+  <aside id="mobile-drawer" class="mobile-drawer">
+    <div class="drawer-header">
+      <img src="/assets/images/logo.svg" alt="StreamPulse" height="28" />
+      <button id="drawer-close-btn" class="drawer-close-btn">&times;</button>
+    </div>
+    <nav class="drawer-links">
+      <a href="/" class="drawer-link" data-i18n="nav_home">Home</a>
+      <a href="/pop/" class="drawer-link" data-i18n="nav_popular">Popular</a>
+      <a href="/l/" class="drawer-link" data-i18n="nav_latest">Latest</a>
+      <a href="/c/" class="drawer-link" data-i18n="nav_categories">Categories</a>
+      <hr style="border:none;border-top:1px solid var(--border-subtle);margin:8px 0;" />
+      <a href="/a/" class="drawer-link" data-i18n="nav_about">About</a>
+      <a href="/ct/" class="drawer-link" data-i18n="nav_contact">Contact</a>
+      <a href="/pr/" class="drawer-link" data-i18n="nav_privacy">Privacy Policy</a>
+      <a href="/t/" class="drawer-link" data-i18n="nav_terms">Terms of Service</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container" style="max-width:880px;">
+
+      <!-- Generator Tool Card -->
+      <section class="gen-card">
+        <div class="gen-header">
+          <div class="gen-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span>PRIVATE OWNER STUDIO</span>
+          </div>
+          <h1 class="gen-title">Generator Video &amp; Pembuat Postingan Baru</h1>
+          <p class="gen-subtitle">
+            Ubah link stream (contoh Videy <code>https://cdn.videy.co/Ky4smNE51.mp4</code>) secara instan menjadi player web ini: <code>//v/?id=Ky4smNE51</code> lengkap dengan thumbnail branded resmi dan kode untuk <code>assets/js/videos.js</code>.
+          </p>
+
+          <!-- Quick Example Chips -->
+          <div class="example-chips">
+            <span style="font-size:0.75rem;color:var(--text-dim);font-weight:600;">Contoh Cepat:</span>
+            <button type="button" class="example-chip" onclick="applyExample('https://www.youtube.com/watch?v=R6MlUcmOul8')">
+              &#9658; YouTube (Publik Web Utama)
+            </button>
+            <button type="button" class="example-chip" onclick="applyExample('https://cdn.videy.co/Ky4smNE51.mp4')">
+              &#9658; cdn.videy.co/Ky4smNE51.mp4
+            </button>
+            <button type="button" class="example-chip" onclick="applyExample('https://www.xxxfollow.com/media/fans/post_public/4532/45324791/1823603.mp4')">
+              &#9658; xxxfollow.com CDN
+            </button>
+            <button type="button" class="example-chip" onclick="applyExample('https://video.twimg.com/amplify_video/2108647717345841152/vid/avc1/720x1280/ND-wN9PYlv3ThapC.mp4?tag=29')">
+              &#9658; twimg.com (Twitter/X CDN)
+            </button>
+          </div>
+        </div>
+
+        <form id="generator-form">
+          <div class="form-group">
+            <label for="input-video-url" class="form-label">URL Video (YouTube atau CDN apa saja)</label>
+            <input 
+              type="text" 
+              id="input-video-url" 
+              class="form-input" 
+              placeholder="Contoh: https://www.youtube.com/watch?v=... atau https://cdn.videy.co/... atau xxxfollow atau twimg" 
+              required 
+            />
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr;gap:14px;" class="form-row-2">
+            <div class="form-group">
+              <label for="input-video-title" class="form-label">Judul Video (Opsional - otomatis terisi jika kosong)</label>
+              <input type="text" id="input-video-title" class="form-input" placeholder="contoh: Video YouTube atau Stream HD" />
+            </div>
+            <div class="form-group">
+              <label for="input-video-category" class="form-label">Kategori</label>
+              <select id="input-video-category" class="form-select">
+                <option value="Tech & AI">Tech & AI</option>
+                <option value="Action & Cinema">Action & Cinema</option>
+                <option value="Gaming">Gaming</option>
+                <option value="Animation">Animation</option>
+                <option value="Nature & 4K">Nature & 4K</option>
+                <option value="Esports">Esports</option>
+                <option value="Lifestyle">Lifestyle</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="gen-submit-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>Generate Video Sekarang &rarr;</span>
+          </button>
+        </form>
+      </section>
+
+      <!-- Results Box (Muncul setelah klik Generate) -->
+      <section id="generator-result" class="result-box">
+        <div id="source-status-banner" style="margin-bottom:14px;padding:12px 14px;border-radius:var(--radius-md);display:flex;flex-direction:column;gap:6px;">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+          <span style="font-size:0.8rem;font-weight:800;color:#10b981;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Hasil Generate Pemutar Web:
+          </span>
+          <span id="result-id-badge" style="font-size:0.75rem;background:#1e293b;padding:4px 10px;border-radius:4px;color:#38bdf8;font-family:monospace;font-weight:700;">
+            ID: Ky4smNE51
+          </span>
+        </div>
+
+        <!-- URL Bar -->
+        <div class="result-url-bar">
+          <span id="result-player-url" class="result-url-text">/v/?id=Ky4smNE51</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-btn-row" id="result-action-buttons">
+          <a id="result-play-btn" href="#" class="sub-action-btn primary" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            <span>Buka &amp; Putar Stream di Tab Baru</span>
+          </a>
+          <button type="button" id="copy-player-link-btn" class="sub-action-btn secondary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Salin URL Player</span>
+          </button>
+          <button type="button" id="publish-to-main-btn" class="sub-action-btn primary" style="background:var(--accent-gradient);display:none;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            <span>🚀 Terbitkan Langsung ke Web Utama</span>
+          </button>
+        </div>
+
+        <!-- Notification Bar When Published to Main -->
+        <div id="publish-success-notice" style="display:none;background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:var(--radius-md);padding:14px;margin-bottom:18px;">
+          <div style="font-size:0.92rem;font-weight:700;color:#34d399;margin-bottom:4px;display:flex;align-items:center;gap:6px;">
+            &#10004; Video YouTube Berhasil Terbit ke Web Utama!
+          </div>
+          <p style="font-size:0.82rem;color:#e2e8f0;margin-bottom:10px;line-height:1.4;">
+            Video ini sekarang otomatis terpampang rapih di Halaman Utama (Beranda, Popular, Latest &amp; Kategori).
+          </p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <a href="/" class="sub-action-btn primary" style="padding:7px 16px;font-size:0.8rem;" target="_blank">
+              👀 Lihat di Beranda Sekarang &rarr;
+            </a>
+            <a id="published-player-link" href="#" class="sub-action-btn secondary" style="padding:7px 16px;font-size:0.8rem;" target="_blank">
+              ▶ Buka Pemutar Video
+            </a>
+          </div>
+        </div>
+
+        <!-- Live In-Page Video Player Test -->
+        <div style="margin-bottom:20px;">
+          <label class="form-label" style="display:flex;align-items:center;justify-content:space-between;">
+            <span>Preview Pemutar Langsung (Live Playback Test):</span>
+            <span style="font-size:0.75rem;color:#10b981;font-weight:600;">&#10004; Responsif 16:9</span>
+          </label>
+          <div class="player-preview-wrapper" id="live-player-preview-box">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Code Snippet for GitHub Permanence -->
+        <div>
+          <label class="form-label" style="font-size:0.82rem;color:#cbd5e1;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;">
+            <span>Kode Objek untuk Disalin ke <code>assets/js/videos.js</code>:</span>
+            <span style="font-size:0.75rem;color:#38bdf8;font-weight:600;">1-Klik Salin</span>
+          </label>
+          <div class="code-preview-box">
+            <button type="button" id="copy-code-btn" class="copy-code-btn">Salin Kode</button>
+            <pre><code id="result-code-snippet">// Kode video yang digenerate</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- User's Saved Videos List -->
+      <section class="gen-card" id="saved-videos-section">
+        <h2 class="section-title" style="margin-bottom:14px;font-size:1.15rem;">
+          <span class="section-title-icon">&#128250;</span>
+          <span>Daftar Video Hasil Generate di Browser Ini</span>
+        </h2>
+        <div id="saved-videos-list">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- Comprehensive Step-by-Step Guide in Indonesian -->
+      <section class="page-article">
+        <h2>Panduan Lengkap: Cara Menambahkan Video Baru ke Web Ini</h2>
+        
+        <div class="guide-step">
+          <div class="guide-step-num">1</div>
+          <div class="guide-step-body">
+            <h4>Metode 1: Putar Instan Cukup dengan URL (Paling Cepat &amp; Praktis)</h4>
+            <p>
+              Sistem StreamPulse sudah mendukung <strong>Dynamic Instant Player</strong>. Anda tidak perlu mengedit file apapun! Cukup gunakan URL player dengan ID Videy:
+            </p>
+            <div style="background:#090d18;border:1px solid var(--border-subtle);padding:10px 14px;border-radius:6px;font-family:monospace;color:#38bdf8;margin:8px 0;font-size:0.85rem;word-break:break-all;">
+              https://domain-anda.github.io//v/?id=Ky4smNE51
+            </div>
+            <p>
+              Ketika pengunjung membuka tautan ini, web langsung memutar video dari Videy CDN secara otomatis dengan tombol Download HD, link VIP Telegram, Adsterra iklan, dan thumbnail branded resmi!
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-num">2</div>
+          <div class="guide-step-body">
+            <h4>Metode 2: Tambah Permanen ke Katalog Web (<code>assets/js/videos.js</code>)</h4>
+            <p>
+              Agar video Anda muncul di halaman Beranda (Featured/Latest/Popular) dan bisa dicari oleh semua pengunjung:
+            </p>
+            <ol style="margin-left:20px;color:var(--text-muted);font-size:0.83rem;line-height:1.7;">
+              <li>Isi link video Anda di form generator di atas, lalu klik <strong>Generate</strong>.</li>
+              <li>Klik tombol <strong>Salin Kode</strong> pada kotak abu-abu di atas.</li>
+              <li>Buka repository GitHub Anda di browser (bisa dari HP atau laptop).</li>
+              <li>Buka file <code>assets/js/videos.js</code>.</li>
+              <li>Klik ikon pensil <strong>Edit this file</strong>.</li>
+              <li>Cari baris <code>const VIDEOS_DATA = [</code> (di bagian atas file).</li>
+              <li>Tempel (paste) kode yang baru disalin tepat setelah tanda kurung siku buka <code>[</code>.</li>
+              <li>Klik tombol hijau <strong>Commit changes</strong> di pojok kanan atas.</li>
+              <li><strong>Selesai!</strong> Dalam 1-2 menit GitHub Pages akan memperbarui web secara otomatis.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-num">3</div>
+          <div class="guide-step-body">
+            <h4>Tentang Thumbnail Khusus Beridentitas Web</h4>
+            <p>
+              Semua video di web ini otomatis menggunakan <strong>Branded Vector Thumbnail</strong> beresolusi 640x360 dengan:
+            </p>
+            <ul style="margin-left:20px;color:var(--text-muted);font-size:0.83rem;line-height:1.6;">
+              <li>Warna tema gelap hitam &amp; aksen neon pink/violet khas StreamPulse.</li>
+              <li>Logo pill <code>STREAMPULSE</code> di sudut kiri atas.</li>
+              <li>Badge kategori &amp; resolusi <code>1080P HD</code> di sudut kanan atas.</li>
+              <li>Ikon glowing play di bagian tengah.</li>
+              <li>Judul video dan ID di bilah bawah.</li>
+            </ul>
+            <p style="margin-top:6px;">
+              Jika Anda ingin membuat file <code>.svg</code> tersendiri, Anda bisa mengklik <strong>Download File SVG</strong> di atas lalu menyimpannya ke folder <code>assets/images/</code>. Atau cukup biarkan field thumbnail kosong, dan web akan membuatnya secara otomatis!
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Nav (Sesuai Navigasi Normal Publik) -->
+  <nav class="bottom-nav">
+    <a href="/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span data-i18n="nav_home">Home</span>
+    </a>
+    <a href="/pop/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+      </svg>
+      <span data-i18n="nav_popular">Popular</span>
+    </a>
+    <a href="/l/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      <span data-i18n="nav_latest">Latest</span>
+    </a>
+    <a href="/c/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span data-i18n="nav_categories">Categories</span>
+    </a>
+  </nav>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 StreamPulse Studio. <span data-i18n="all_rights_reserved">All rights reserved.</span></div>
+        <div>Panel Pribadi Pemilik Situs &bull; Akses Terlindungi</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/assets/js/i18n.js"></script>
+  <script src="/assets/js/ads.js"></script>
+  <script src="/assets/js/videos.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script>
+    const ADMIN_PIN = 'admin123';
+    let currentGeneratedVideo = null;
+    let currentSvgCode = '';
+
+    // ==========================================
+    // SISTEM KEAMANAN PIN PEMILIK SITUS
+    // ==========================================
+    function checkAdminAuth() {
+      const overlay = document.getElementById('security-overlay');
+      const urlParams = new URLSearchParams(window.location.search);
+      const keyInQuery = urlParams.get('key') || urlParams.get('pin');
+
+      // Cek apakah key cocok via parameter URL atau localStorage/sessionStorage
+      const isAuthSession = sessionStorage.getItem('streampulse_admin_auth') === 'true';
+      const isAuthSaved = localStorage.getItem('streampulse_admin_saved') === 'true';
+
+      if (keyInQuery === ADMIN_PIN || isAuthSession || isAuthSaved) {
+        sessionStorage.setItem('streampulse_admin_auth', 'true');
+        overlay.style.display = 'none';
+      } else {
+        overlay.style.display = 'flex';
+      }
+    }
+
+    document.getElementById('pin-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const entered = document.getElementById('pin-input').value.trim();
+      const remember = document.getElementById('remember-pin').checked;
+      const overlay = document.getElementById('security-overlay');
+
+      if (entered === ADMIN_PIN) {
+        sessionStorage.setItem('streampulse_admin_auth', 'true');
+        if (remember) {
+          localStorage.setItem('streampulse_admin_saved', 'true');
+        }
+        overlay.style.display = 'none';
+        if (window.showToast) window.showToast('Akses Berhasil Dibuka! Selamat datang di Studio.');
+      } else {
+        alert('PIN salah! Silakan masukkan PIN Admin yang benar (Default: admin123).');
+        document.getElementById('pin-input').value = '';
+        document.getElementById('pin-input').focus();
+      }
+    });
+
+    document.getElementById('lock-studio-btn').addEventListener('click', () => {
+      sessionStorage.removeItem('streampulse_admin_auth');
+      localStorage.removeItem('streampulse_admin_saved');
+      document.getElementById('security-overlay').style.display = 'flex';
+      document.getElementById('pin-input').value = '';
+      if (window.showToast) window.showToast('Panel generator berhasil dikunci.');
+    });
+
+    // ==========================================
+    // GENERATOR LOGIC
+    // ==========================================
+    function applyExample(url) {
+      const urlInput = document.getElementById('input-video-url');
+      if (urlInput) {
+        urlInput.value = url;
+        triggerAutoFill(url);
+      }
+    }
+
+    function triggerAutoFill(url) {
+      const titleInput = document.getElementById('input-video-title');
+      if (titleInput && (!titleInput.value || titleInput.value.startsWith('Videy') || titleInput.value.startsWith('Custom'))) {
+        const parsed = window.parseVideoInputUrl ? window.parseVideoInputUrl(url) : null;
+        if (parsed) {
+          titleInput.value = parsed.title;
+        }
+      }
+    }
+
+    document.getElementById('input-video-url').addEventListener('input', (e) => {
+      triggerAutoFill(e.target.value);
+    });
+
+    // Form submission
+    document.getElementById('generator-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const rawUrl = document.getElementById('input-video-url').value.trim();
+      const title = document.getElementById('input-video-title').value.trim();
+      const category = document.getElementById('input-video-category').value;
+
+      if (!rawUrl) return;
+
+      const videoObj = window.parseVideoInputUrl(rawUrl, {
+        title: title || undefined,
+        category: category
+      });
+
+      if (!videoObj) {
+        alert('Format URL video tidak valid. Contoh: https://cdn.videy.co/Ky4smNE51.mp4');
+        return;
+      }
+
+      currentGeneratedVideo = videoObj;
+      displayGeneratedResult(videoObj);
+    });
+
+    function displayGeneratedResult(video) {
+      const resultBox = document.getElementById('generator-result');
+      const urlText = document.getElementById('result-player-url');
+      const idBadge = document.getElementById('result-id-badge');
+      const playBtn = document.getElementById('result-play-btn');
+      const publishBtn = document.getElementById('publish-to-main-btn');
+      const publishNotice = document.getElementById('publish-success-notice');
+      const publishedPlayerLink = document.getElementById('published-player-link');
+      const statusBanner = document.getElementById('source-status-banner');
+      const codeSnippet = document.getElementById('result-code-snippet');
+      const livePlayerBox = document.getElementById('live-player-preview-box');
+
+      const relativePlayerUrl = `/v/?id=${encodeURIComponent(video.id)}`;
+
+      idBadge.textContent = `ID: ${video.id}`;
+      urlText.textContent = relativePlayerUrl;
+      playBtn.href = relativePlayerUrl;
+      if (publishedPlayerLink) publishedPlayerLink.href = relativePlayerUrl;
+      if (publishNotice) publishNotice.style.display = 'none';
+
+      // 1. DYNAMIC SOURCE BANNER & ACTION BUTTONS
+      if (video.sourceType === 'youtube') {
+        if (publishBtn) publishBtn.style.display = 'flex';
+        statusBanner.innerHTML = `
+          <div style="background:rgba(239, 68, 68, 0.15);border:1px solid rgba(239,68,68,0.45);border-radius:var(--radius-md);padding:12px 14px;">
+            <div style="display:flex;align-items:center;gap:8px;font-weight:800;color:#f87171;font-size:0.85rem;text-transform:uppercase;">
+              <span>🔴 SUMBER RESMI: YOUTUBE (PUBLIK WEB)</span>
+              <span style="background:#ef4444;color:#fff;padding:2px 7px;border-radius:3px;font-size:0.68rem;letter-spacing:0.5px;">BISA TERBIT KE BERANDA</span>
+            </div>
+            <p style="font-size:0.82rem;color:#cbd5e1;margin-top:6px;line-height:1.45;margin-bottom:0;">
+              Video ini terdeteksi dari YouTube. Klik tombol hijau <strong>"🚀 Terbitkan Langsung ke Web Utama"</strong> di bawah agar video ini langsung terpampang rapih di Beranda, Popular, Latest, dan Kategori!
+            </p>
+          </div>
+        `;
+      } else {
+        if (publishBtn) publishBtn.style.display = 'none';
+        statusBanner.innerHTML = `
+          <div style="background:rgba(139, 92, 246, 0.15);border:1px solid rgba(139,92,246,0.45);border-radius:var(--radius-md);padding:12px 14px;">
+            <div style="display:flex;align-items:center;gap:8px;font-weight:800;color:#c4b5fd;font-size:0.85rem;text-transform:uppercase;">
+              <span>🔒 SUMBER: CDN PRIVAT (STREAM LANGSUNG)</span>
+              <span style="background:#8b5cf6;color:#fff;padding:2px 7px;border-radius:3px;font-size:0.68rem;letter-spacing:0.5px;">TIDAK TAMPIL DI WEB UTAMA</span>
+            </div>
+            <p style="font-size:0.82rem;color:#cbd5e1;margin-top:6px;line-height:1.45;margin-bottom:0;">
+              Sesuai aturan web Anda: Sumber video dari CDN (Videy, xxxfollow, Twitter, MP4) tidak ditampilkan di katalog publik / Beranda. Video ini 100% siap ditonton via URL pemutar langsung di atas.
+            </p>
+          </div>
+        `;
+      }
+
+      // 2. Render Live Embedded Video Player
+      livePlayerBox.innerHTML = '';
+      if (video.directVideoUrl) {
+        const videoEl = document.createElement('video');
+        videoEl.controls = true;
+        videoEl.playsInline = true;
+        videoEl.preload = 'metadata';
+        videoEl.setAttribute('referrerpolicy', 'no-referrer');
+        videoEl.setAttribute('crossorigin', 'anonymous');
+        videoEl.src = video.directVideoUrl;
+        if (video.thumbnail) videoEl.poster = video.thumbnail;
+        if (video.isVertical) videoEl.className = 'vertical-video';
+        livePlayerBox.appendChild(videoEl);
+      } else if (video.embedUrl) {
+        const iframe = document.createElement('iframe');
+        iframe.src = video.embedUrl;
+        iframe.allow = 'autoplay; fullscreen; accelerometer; gyroscope';
+        livePlayerBox.appendChild(iframe);
+      } else {
+        livePlayerBox.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;">Format stream siap diputar di halaman /v/</div>';
+      }
+
+      // 3. Code Snippet for GitHub videos.js
+      const codeString = `  {
+    id: '${video.id}',
+    slug: '${video.slug}',
+    title: '${video.title.replace(/'/g, "\\'")}',
+    description: '${video.description.replace(/'/g, "\\'")}',
+    thumbnail: '${video.thumbnail}',
+    sourceType: '${video.sourceType}',
+    directVideoUrl: '${video.directVideoUrl}',
+    embedUrl: '${video.embedUrl}',
+    downloadUrl: '${video.downloadUrl}',
+    joinPrivateUrl: '${video.joinPrivateUrl}',
+    category: '${video.category}',
+    tags: ${JSON.stringify(video.tags)},
+    duration: '${video.duration}',
+    quality: '${video.quality || "1080p HD"}',
+    isPublic: ${video.sourceType === 'youtube'},
+    publishedAt: '${video.publishedAt}',
+    featured: false,
+    popularity: ${video.popularity},
+    views: ${video.views},
+    relatedArticleIds: ['art-01', 'art-05']
+  },`;
+
+      codeSnippet.textContent = codeString;
+      resultBox.classList.add('active');
+      resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Publish YouTube Video directly to Main Website (Beranda, Popular, etc.)
+    document.getElementById('publish-to-main-btn').addEventListener('click', () => {
+      if (!currentGeneratedVideo) return;
+      currentGeneratedVideo.isPublic = true;
+      currentGeneratedVideo.sourceType = 'youtube';
+      const ok = window.saveCustomVideo(currentGeneratedVideo);
+      if (ok) {
+        const notice = document.getElementById('publish-success-notice');
+        if (notice) notice.style.display = 'block';
+        if (window.showToast) {
+          window.showToast('🎉 Sukses! Video YouTube langsung masuk dan terpampang rapih di Beranda!');
+        }
+        renderSavedVideosList();
+      }
+    });
+
+    // Copy player link
+    document.getElementById('copy-player-link-btn').addEventListener('click', () => {
+      if (!currentGeneratedVideo) return;
+      const playerUrl = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, '')}//v/?id=${encodeURIComponent(currentGeneratedVideo.id)}`;
+      navigator.clipboard.writeText(playerUrl).then(() => {
+        if (window.showToast) window.showToast('Tautan Pemutar Berhasil Disalin!');
+      });
+    });
+
+    // Copy code snippet
+    document.getElementById('copy-code-btn').addEventListener('click', () => {
+      const code = document.getElementById('result-code-snippet').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        if (window.showToast) window.showToast('Kode untuk videos.js Berhasil Disalin!');
+      });
+    });
+
+    // Render saved videos list
+    function renderSavedVideosList() {
+      const listEl = document.getElementById('saved-videos-list');
+      if (!listEl) return;
+      const list = window.getCustomVideos ? window.getCustomVideos() : [];
+
+      if (list.length === 0) {
+        listEl.innerHTML = `
+          <div style="text-align:center;padding:24px;color:var(--text-dim);font-size:0.85rem;">
+            Belum ada video custom yang disimpan di browser ini. Generate video YouTube di atas dan klik "Terbitkan Langsung ke Web Utama".
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = '';
+      list.forEach((v) => {
+        const item = document.createElement('div');
+        const isYt = v.sourceType === 'youtube';
+        item.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-md);margin-bottom:8px;gap:12px;flex-wrap:wrap;';
+        item.innerHTML = `
+          <div style="min-width:0;flex:1;">
+            <div style="font-size:0.88rem;font-weight:700;color:#ffffff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${v.title}</div>
+            <div style="font-size:0.75rem;color:var(--text-dim);display:flex;gap:8px;margin-top:2px;align-items:center;">
+              <span style="${isYt ? 'color:#34d399;' : 'color:#c4b5fd;'}font-weight:700;">
+                ${isYt ? '● Terbit di Web Utama' : '🔒 Player Privat'}
+              </span> &bull; 
+              <span style="color:#38bdf8;font-family:monospace;">ID: ${v.id}</span> &bull; 
+              <span>${v.category}</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <a href="/v/?id=${encodeURIComponent(v.id)}" class="sub-action-btn primary" style="padding:6px 14px;font-size:0.75rem;">Buka Player</a>
+            <button class="sub-action-btn secondary delete-btn" data-id="${v.id}" style="padding:6px 10px;font-size:0.75rem;color:#f87171;" title="Hapus dari browser">&times;</button>
+          </div>
+        `;
+        item.querySelector('.delete-btn').addEventListener('click', () => {
+          if (confirm(`Hapus video "${v.title}" dari browser?`)) {
+            window.deleteCustomVideo(v.id);
+            renderSavedVideosList();
+          }
+        });
+        listEl.appendChild(item);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAdminAuth();
+      renderSavedVideosList();
+      const params = new URLSearchParams(window.location.search);
+      const urlQuery = params.get('url');
+      if (urlQuery) {
+        applyExample(urlQuery);
+      }
+    });
+  </script>
+</body>
+</html>

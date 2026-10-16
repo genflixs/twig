@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" fill="none">
+  <defs>
+    <linearGradient id="bg-grad-v" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0d18" />
+      <stop offset="50%" stop-color="#14142b" />
+      <stop offset="100%" stop-color="#060810" />
+    </linearGradient>
+    <linearGradient id="neon-v" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF3366" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    <radialGradient id="glow-v" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="640" height="360" fill="url(#bg-grad-v)" />
+  <circle cx="320" cy="180" r="220" fill="url(#glow-v)" />
+
+  <!-- Subtle tech grid -->
+  <path d="M0 60 H640 M0 120 H640 M0 180 H640 M0 240 H640 M0 300 H640" stroke="#FFFFFF" stroke-opacity="0.04" stroke-width="1" />
+  <path d="M80 0 V360 M160 0 V360 M240 0 V360 M320 0 V360 M400 0 V360 M480 0 V360 M560 0 V360" stroke="#FFFFFF" stroke-opacity="0.04" stroke-width="1" />
+
+  <!-- Neon Frame Border Accent -->
+  <rect x="14" y="14" width="612" height="332" rx="14" fill="none" stroke="url(#neon-v)" stroke-width="1.5" stroke-opacity="0.4" />
+
+  <!-- StreamPulse Brand Header Pill -->
+  <g transform="translate(32, 32)">
+    <rect width="130" height="26" rx="13" fill="#111728" stroke="#25304d" stroke-width="1" />
+    <circle cx="14" cy="13" r="5" fill="#FF3366" />
+    <text x="26" y="17" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="800" fill="#FFFFFF" letter-spacing="0.5">STREAMPULSE</text>
+  </g>
+
+  <!-- Category & Resolution Badge -->
+  <g transform="translate(488, 32)">
+    <rect width="120" height="26" rx="6" fill="#1e183a" stroke="#8B5CF6" stroke-width="1" />
+    <text x="60" y="17" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="800" fill="#C4B5FD" letter-spacing="1">VIDEY HD 1080P</text>
+  </g>
+
+  <!-- Center Emblem -->
+  <g transform="translate(320, 160)">
+    <circle cx="0" cy="0" r="48" fill="#0c101d" stroke="url(#neon-v)" stroke-width="3" />
+    <!-- Pulse icon & play triangle -->
+    <path d="M-10 -15 L14 0 L-10 15 Z" fill="url(#neon-v)" />
+  </g>
+
+  <!-- Title & ID Info Bar -->
+  <rect x="32" y="246" width="576" height="76" rx="12" fill="#0a0e1a" fill-opacity="0.85" stroke="#1c2438" stroke-width="1" />
+  <text x="50" y="278" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif" font-size="20" font-weight="900" fill="#FFFFFF">
+    VIDEY STREAM &bull; Ky4smNE51
+  </text>
+  <text x="50" y="302" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" fill="#94A3B8">
+    CDN Direct Stream &bull; Mobile-First Fast Buffer &bull; Direct HD Download
+  </text>
+</svg>

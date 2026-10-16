@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="referrer" content="no-referrer" />
+  <title>About Us - StreamPulse HD</title>
+  <meta name="description" content="Learn about StreamPulse, an open-architecture, mobile-first video streaming platform engineered for GitHub Pages." />
+  <meta property="og:title" content="About Us - StreamPulse HD" />
+  <meta property="og:description" content="Learn about StreamPulse, an open-architecture, mobile-first video streaming platform engineered for GitHub Pages." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#070a12" />
+  <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open Navigation Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <a href="/" class="brand-logo" aria-label="StreamPulse Home">
+          <img src="/assets/images/logo.svg" alt="StreamPulse Logo" width="160" height="34" />
+        </a>
+      </div>
+
+      <nav class="desktop-nav" aria-label="Main Navigation">
+        <a href="/" class="nav-link" data-i18n="nav_home">Home</a>
+        <a href="/pop/" class="nav-link" data-i18n="nav_popular">Popular</a>
+        <a href="/l/" class="nav-link" data-i18n="nav_latest">Latest</a>
+        <a href="/c/" class="nav-link" data-i18n="nav_categories">Categories</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="lang-selector">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="id">ID</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div id="drawer-backdrop" class="drawer-backdrop"></div>
+  <aside id="mobile-drawer" class="mobile-drawer" aria-label="Mobile Drawer Navigation">
+    <div class="drawer-header">
+      <img src="/assets/images/logo.svg" alt="StreamPulse" height="28" />
+      <button id="drawer-close-btn" class="drawer-close-btn" aria-label="Close navigation">&times;</button>
+    </div>
+    <nav class="drawer-links">
+      <a href="/" class="drawer-link" data-i18n="nav_home">Home</a>
+      <a href="/pop/" class="drawer-link" data-i18n="nav_popular">Popular</a>
+      <a href="/l/" class="drawer-link" data-i18n="nav_latest">Latest</a>
+      <a href="/c/" class="drawer-link" data-i18n="nav_categories">Categories</a>
+      <hr style="border:none;border-top:1px solid var(--border-subtle);margin:8px 0;" />
+      <a href="/a/" class="drawer-link active" data-i18n="nav_about">About</a>
+      <a href="/ct/" class="drawer-link" data-i18n="nav_contact">Contact</a>
+      <a href="/pr/" class="drawer-link" data-i18n="nav_privacy">Privacy Policy</a>
+      <a href="/t/" class="drawer-link" data-i18n="nav_terms">Terms of Service</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="container">
+      <article class="page-article">
+        <h1 data-i18n="nav_about">About StreamPulse</h1>
+        <p>
+          StreamPulse is an ultra-fast, mobile-first video streaming web platform built with a zero-server static architecture specifically designed for direct hosting on GitHub Pages, Cloudflare Pages, or any static CDN.
+        </p>
+
+        <h2>Engineered for Mobile Performance</h2>
+        <p>
+          Unlike heavy single-page apps burdened by massive JavaScript runtimes and server dependencies, StreamPulse utilizes lightweight semantic HTML5, high-efficiency CSS, and vanilla JavaScript. This guarantees near-instant First Contentful Paint times and fluid 60FPS mobile browsing even over cellular connections.
+        </p>
+
+        <h2>Key Capabilities</h2>
+        <ul>
+          <li><strong>Multi-Source Video Engine:</strong> Native support for HTML5 direct MP4 streams, YouTube embeds, Videy.co embeds, and third-party iframe providers.</li>
+          <li><strong>Centralized Adsterra Monetization:</strong> Isolated ad slots with timed in-player overlays, responsive banner containers, and effortless publisher configuration.</li>
+          <li><strong>Bilingual i18n System:</strong> Seamless language switching between English and Indonesian with persistent user preferences.</li>
+          <li><strong>Zero Backend Requirement:</strong> Operates entirely without Node.js server hosting, PHP, or relational databases.</li>
+        </ul>
+
+        <h2>Open Architecture & Extensibility</h2>
+        <p>
+          Managing videos, articles, and advertisement tags takes place within clean, structured JavaScript files (<code>assets/js/videos.js</code> and <code>assets/js/ads.js</code>). Adding or updating videos requires only adding an entry to the JSON array.
+        </p>
+      </article>
+    </div>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Mobile Bottom Navigation">
+    <a href="/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span data-i18n="nav_home">Home</span>
+    </a>
+    <a href="/pop/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+      </svg>
+      <span data-i18n="nav_popular">Popular</span>
+    </a>
+    <a href="/l/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      <span data-i18n="nav_latest">Latest</span>
+    </a>
+    <a href="/c/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span data-i18n="nav_categories">Categories</span>
+    </a>
+  </nav>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 StreamPulse. <span data-i18n="all_rights_reserved">All rights reserved.</span></div>
+        <div><span data-i18n="developed_for">Built for GitHub Pages</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/i18n.js"></script>
+  <script src="/assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+# StreamPulse GitHub Pages configuration.
+# The presence of `.nojekyll` in the repository root already disables Jekyll
+# processing entirely, which is the recommended setup for this project
+# (pure static HTML/CSS/JS — no Liquid, no Markdown compilation needed).
+# This _config.yml is kept as a redundant safety net in case `.nojekyll` is
+# accidentally removed: it disables every Jekyll plugin and feature that
+# could otherwise interfere with the `assets/` folder.
+
+# Serve every file as-is, no Liquid templating.
+safe: true
+
+# Disable all plugins (no jekyll-feed, no jekyll-seo-tag, etc).
+plugins: []
+
+# Do not exclude anything — publish the whole repository.
+include:
+  - .nojekyll
+  - index.html
+  - 404.html
+  - sitemap.xml
+  - robots.txt
+  - README.md
+  - PANDUAN-ADD-VIDEO.md
+  - v/index.html
+  - g/index.html
+  - pop/index.html
+  - l/index.html
+  - c/index.html
+  - ct/index.html
+  - a/index.html
+  - pr/index.html
+  - t/index.html
+
+# Treat `assets/` as a plain directory (NOT a Jekyll/Sass collection).
+sass:
+  style: compressed
+
+# Disable Liquid templating on included files.
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+# Disable permalink templating — keep raw filenames.
+permalink: none
+
+# Do not generate any of Jekyll's default index pages.
+defaults: []

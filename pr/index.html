@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Privacy Policy - StreamPulse HD</title>
+  <meta name="description" content="StreamPulse Privacy Policy detailing local storage usage, advertising networks, and data practices." />
+  <meta name="theme-color" content="#070a12" />
+  <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open Navigation Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <a href="/" class="brand-logo" aria-label="StreamPulse Home">
+          <img src="/assets/images/logo.svg" alt="StreamPulse Logo" width="160" height="34" />
+        </a>
+      </div>
+
+      <nav class="desktop-nav" aria-label="Main Navigation">
+        <a href="/" class="nav-link" data-i18n="nav_home">Home</a>
+        <a href="/pop/" class="nav-link" data-i18n="nav_popular">Popular</a>
+        <a href="/l/" class="nav-link" data-i18n="nav_latest">Latest</a>
+        <a href="/c/" class="nav-link" data-i18n="nav_categories">Categories</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="lang-selector">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="id">ID</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div id="drawer-backdrop" class="drawer-backdrop"></div>
+  <aside id="mobile-drawer" class="mobile-drawer">
+    <div class="drawer-header">
+      <img src="/assets/images/logo.svg" alt="StreamPulse" height="28" />
+      <button id="drawer-close-btn" class="drawer-close-btn">&times;</button>
+    </div>
+    <nav class="drawer-links">
+      <a href="/" class="drawer-link" data-i18n="nav_home">Home</a>
+      <a href="/pop/" class="drawer-link" data-i18n="nav_popular">Popular</a>
+      <a href="/l/" class="drawer-link" data-i18n="nav_latest">Latest</a>
+      <a href="/c/" class="drawer-link" data-i18n="nav_categories">Categories</a>
+      <hr style="border:none;border-top:1px solid var(--border-subtle);margin:8px 0;" />
+      <a href="/a/" class="drawer-link" data-i18n="nav_about">About</a>
+      <a href="/ct/" class="drawer-link" data-i18n="nav_contact">Contact</a>
+      <a href="/pr/" class="drawer-link active" data-i18n="nav_privacy">Privacy Policy</a>
+      <a href="/t/" class="drawer-link" data-i18n="nav_terms">Terms of Service</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="container">
+      <article class="page-article">
+        <h1 data-i18n="nav_privacy">Privacy Policy</h1>
+        <p>Last updated: October 2026</p>
+
+        <h2>1. Zero Server-Side Data Collection</h2>
+        <p>
+          StreamPulse operates as a purely static website. We do not maintain any user database, server-side user tracking logs, or private accounts on our servers.
+        </p>
+
+        <h2>2. Client-Side LocalStorage</h2>
+        <p>
+          We utilize standard browser <code>localStorage</code> exclusively to preserve your chosen interface language preference (e.g., English or Indonesian). No personally identifiable information (PII) is recorded or transmitted.
+        </p>
+
+        <h2>3. Third-Party Advertising & Adsterra</h2>
+        <p>
+          This website may display advertisements served by third-party ad networks, including Adsterra. These providers may use standard web cookies, web beacons, or device identifiers in accordance with their respective privacy policies to deliver relevant advertising. You may manage cookie preferences via your web browser settings.
+        </p>
+
+        <h2>4. External Video Providers</h2>
+        <p>
+          Embedded video players (such as YouTube or Videy) are governed by the respective terms and privacy policies of those third-party services.
+        </p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 StreamPulse. <span data-i18n="all_rights_reserved">All rights reserved.</span></div>
+        <div><span data-i18n="developed_for">Built for GitHub Pages</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/i18n.js"></script>
+  <script src="/assets/js/app.js"></script>
+</body>
+</html>

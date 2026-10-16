@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" fill="none">
+  <defs>
+    <linearGradient id="bg-bbb" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a1412" />
+      <stop offset="50%" stop-color="#141a29" />
+      <stop offset="100%" stop-color="#070a13" />
+    </linearGradient>
+    <linearGradient id="neon-bbb" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    <radialGradient id="mesh-bbb" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="640" height="360" fill="url(#bg-bbb)" />
+  <circle cx="320" cy="180" r="220" fill="url(#mesh-bbb)" />
+  <path d="M0 60 H640 M0 120 H640 M0 180 H640 M0 240 H640 M0 300 H640" stroke="#FFFFFF" stroke-opacity="0.04" stroke-width="1" />
+  <rect x="14" y="14" width="612" height="332" rx="14" fill="none" stroke="url(#neon-bbb)" stroke-width="1.5" stroke-opacity="0.4" />
+
+  <g transform="translate(32, 32)">
+    <rect width="130" height="26" rx="13" fill="#111728" stroke="#25304d" stroke-width="1" />
+    <circle cx="14" cy="13" r="5" fill="#10B981" />
+    <text x="26" y="17" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="800" fill="#FFFFFF" letter-spacing="0.5">STREAMPULSE</text>
+  </g>
+
+  <g transform="translate(490, 32)">
+    <rect width="118" height="26" rx="6" fill="#13271f" stroke="#10B981" stroke-width="1" />
+    <text x="59" y="17" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="800" fill="#6EE7B7" letter-spacing="1">ANIMATION 1080P</text>
+  </g>
+
+  <g transform="translate(320, 155)">
+    <circle cx="0" cy="0" r="48" fill="#0c101d" stroke="url(#neon-bbb)" stroke-width="3" />
+    <path d="M-10 -15 L14 0 L-10 15 Z" fill="url(#neon-bbb)" />
+  </g>
+
+  <rect x="32" y="246" width="576" height="76" rx="12" fill="#0a0e1a" fill-opacity="0.85" stroke="#1c2438" stroke-width="1" />
+  <text x="50" y="278" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="900" fill="#FFFFFF">
+    BIG BUCK BUNNY &bull; CLASSIC ADVENTURE
+  </text>
+  <text x="50" y="302" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" fill="#94A3B8">
+    Remastered 60FPS &bull; Vivid Color Palette &bull; Blender Open Movie
+  </text>
+</svg>
