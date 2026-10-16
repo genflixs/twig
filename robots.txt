@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: //g/
 
-Sitemap: https://username.github.io/streampulse/sitemap.xml
+Sitemap: https://twig.biz.id/sitemap.xml

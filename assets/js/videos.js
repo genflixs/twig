@@ -590,7 +590,7 @@ const ARTICLES_DATA = [
   },
   {
     id: 'art-05',
-    title: 'Static Hosting on GitHub Pages: Architectural Secrets for Ultra Speed',
+    title: 'Static Hosting on Server: Architectural Secrets for Ultra Speed',
     excerpt: 'How zero-server web architectures achieve sub-500ms First Contentful Paint times with client-side caching, vector icons, and lazy media pipelines.',
     category: 'Tech & AI',
     readTime: '7 min read',

@@ -1,6 +1,6 @@
 /**
  * StreamPulse - Core Application Engine
- * Lightweight, zero-dependency vanilla JS for GitHub Pages.
+ * Lightweight, zero-dependency vanilla JS for Server.
  */
 
 // Toast notification helper
@@ -130,8 +130,8 @@ function initCommonUI() {
   highlightActiveNav();
 
   // Initialize ZIP download buttons if any
-  document.querySelectorAll('.export-ghpages-btn').forEach((btn) => {
-    btn.addEventListener('click', exportGitHubPagesZip);
+  document.querySelectorAll('.export-server-btn').forEach((btn) => {
+    btn.addEventListener('click', exportServerZip);
   });
 
   // Secret Owner Gesture: Ketuk logo 3 kali berturut-turut untuk membuka generator rahasia
@@ -171,11 +171,11 @@ function highlightActiveNav() {
 }
 
 /**
- * Client-Side GitHub Pages Ready ZIP Generator using JSZip
+ * Client-Side Server Ready ZIP Generator using JSZip
  */
-async function exportGitHubPagesZip(e) {
+async function exportServerZip(e) {
   if (e) e.preventDefault();
-  showToast('Preparing GitHub Pages zip package...');
+  showToast('Preparing Server zip package...');
 
   try {
     // If JSZip is not on window, load dynamically
@@ -194,10 +194,10 @@ async function exportGitHubPagesZip(e) {
     // Complete list of static files to package — MUST stay in sync with the
     // actual repository contents. Previously this list omitted most SVG
     // thumbnails and the `.nojekyll` file, which caused exported ZIPs to look
-    // completely broken when uploaded to GitHub Pages (missing thumbnails +
+    // completely broken when uploaded to Server (missing thumbnails +
     // Jekyll processing eating files inside `assets/`).
     const filesToFetch = [
-      // Root config (CRITICAL for GitHub Pages)
+      // Root config (CRITICAL for Server)
       '.nojekyll',
       '_config.yml',
       // HTML pages
@@ -268,11 +268,11 @@ async function exportGitHubPagesZip(e) {
     const content = await zip.generateAsync({ type: 'blob' });
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(content);
-    downloadLink.download = 'streampulse-github-pages.zip';
+    downloadLink.download = 'streampulse-server-pages.zip';
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-    showToast(`Download complete! ${packagedCount} files packaged. Ready for GitHub Pages.`);
+    showToast(`Download complete! ${packagedCount} files packaged. Ready for Server.`);
   } catch (err) {
     console.error('Failed to export ZIP:', err);
     showToast('Could not bundle zip directly. Please use git or clone files.');
@@ -571,4 +571,4 @@ window.renderPopularPage = renderPopularPage;
 window.renderLatestPage = renderLatestPage;
 window.renderCategoriesPage = renderCategoriesPage;
 window.showToast = showToast;
-window.exportGitHubPagesZip = exportGitHubPagesZip;
+window.exportServerZip = exportServerZip;

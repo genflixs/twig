@@ -1,4 +1,4 @@
-# StreamPulse GitHub Pages configuration.
+# StreamPulse Server configuration.
 # The presence of `.nojekyll` in the repository root already disables Jekyll
 # processing entirely, which is the recommended setup for this project
 # (pure static HTML/CSS/JS — no Liquid, no Markdown compilation needed).

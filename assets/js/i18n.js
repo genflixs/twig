@@ -37,7 +37,7 @@ const translations = {
     play_now_btn: 'Watch Now',
     copy_player_link_btn: 'Copy Player URL',
     save_local_btn: 'Save to My Videos (Instant)',
-    code_for_github: 'Code Snippet for assets/js/videos.js (Permanent GitHub Hosting)',
+    code_for_server: 'Code Snippet for assets/js/videos.js (Permanent Server Hosting)',
     how_to_add_title: 'How to Add New Videos',
     my_saved_videos: 'My Generated & Added Videos',
 
@@ -94,16 +94,16 @@ const translations = {
     ad_placeholder_title: 'Adsterra Ad Placement Slot',
     ad_placeholder_desc: 'Configure your official publisher tag in assets/js/ads.js',
 
-    // Export & GitHub Pages
-    export_zip_button: 'Download GitHub Pages ZIP',
-    export_zip_tooltip: 'Export ready-to-deploy static files for GitHub Pages',
+    // Export & Server
+    export_zip_button: 'Download Server ZIP',
+    export_zip_tooltip: 'Export ready-to-deploy static files for Server',
 
     // Footer
-    footer_desc: 'StreamPulse is a lightweight, mobile-first video streaming web platform built for high-performance static hosting on GitHub Pages.',
+    footer_desc: 'StreamPulse is a lightweight, mobile-first video streaming web platform built for high-performance static hosting on Server.',
     quick_links: 'Quick Links',
     legal: 'Legal & Info',
     all_rights_reserved: 'All rights reserved.',
-    developed_for: 'Built for GitHub Pages'
+    developed_for: 'Built for Server'
   },
   id: {
     // Navigasi
@@ -135,7 +135,7 @@ const translations = {
     play_now_btn: 'Tonton Sekarang',
     copy_player_link_btn: 'Salin URL Pemutar',
     save_local_btn: 'Simpan ke Koleksi Saya (Instan)',
-    code_for_github: 'Cuplikan Kode untuk assets/js/videos.js (Permanen di GitHub)',
+    code_for_server: 'Cuplikan Kode untuk assets/js/videos.js (Permanen di Server)',
     how_to_add_title: 'Cara Menambahkan Video Baru',
     my_saved_videos: 'Video yang Telah Digenerate & Ditambahkan',
 
@@ -192,16 +192,16 @@ const translations = {
     ad_placeholder_title: 'Slot Penempatan Iklan Adsterra',
     ad_placeholder_desc: 'Konfigurasikan tag penayang resmi Anda di assets/js/ads.js',
 
-    // Ekspor & GitHub Pages
-    export_zip_button: 'Unduh ZIP GitHub Pages',
-    export_zip_tooltip: 'Ekspor berkas statis siap pakai untuk GitHub Pages',
+    // Ekspor & Server
+    export_zip_button: 'Unduh ZIP Server',
+    export_zip_tooltip: 'Ekspor berkas statis siap pakai untuk Server',
 
     // Footer
-    footer_desc: 'StreamPulse adalah platform web streaming video ringan yang dioptimalkan untuk seluler dan hosting statis di GitHub Pages.',
+    footer_desc: 'StreamPulse adalah platform web streaming video ringan yang dioptimalkan untuk seluler dan hosting statis di Server.',
     quick_links: 'Tautan Cepat',
     legal: 'Hukum & Info',
     all_rights_reserved: 'Hak cipta dilindungi.',
-    developed_for: 'Dibuat untuk GitHub Pages'
+    developed_for: 'Dibuat untuk Server'
   }
 };
 

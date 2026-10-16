@@ -1,6 +1,6 @@
 /*
  * StreamPulse - Mobile-First Video Streaming Platform
- * Production CSS - Optimized for GitHub Pages & Fast Mobile Networks
+ * Production CSS - Optimized for Server & Fast Mobile Networks
  */
 
 :root {
@@ -1527,7 +1527,7 @@ button, input, select {
   margin-bottom: 24px;
 }
 
-/* Floating Export ZIP Tool for GitHub Pages */
+/* Floating Export ZIP Tool for Server */
 .export-zip-badge {
   display: inline-flex;
   align-items: center;
