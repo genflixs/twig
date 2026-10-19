@@ -817,6 +817,42 @@
       displayGeneratedResult(videoObj);
     });
 
+    /**
+     * Build the player URL path for a generated video.
+     *
+     * - YouTube: keeps the short ID form `/v/?id=<videoId>` because YouTube
+     *   videos are public, embedded via iframe, and look cleaner with short URLs.
+     *
+     * - CDN sources (twimg / xxxfollow / videy / direct MP4): encodes the FULL
+     *   directVideoUrl as Base64 and passes it via `?id=b64_<base64>`. This
+     *   lets the player page reconstruct the original stream URL on ANY
+     *   browser/device — even when the video is NOT in localStorage or the
+     *   built-in catalog. Without this, a twimg URL like
+     *   `.../ND-wN9PYlv3ThapC.mp4` would extract the bare ID `ND-wN9PYlv3ThapC`
+     *   which the player would mistake for a Videy ID and try to load from
+     *   `cdn.videy.co/ND-wN9PYlv3ThapC.mp4` -> 404 "Video Not Found".
+     *
+     * Returns a root-relative path like `/v/?id=...` (no host, no double slash).
+     */
+    function buildPlayerPath(video) {
+      if (!video || !video.id) return '/v/';
+      // YouTube: keep it short and clean (iframe embeddable, public catalog lookup).
+      if (video.sourceType === 'youtube' || !video.directVideoUrl) {
+        return `/v/?id=${encodeURIComponent(video.id)}`;
+      }
+      // CDN: encode the full source URL so the player can replay it from
+      // any browser, not just the one that generated the link.
+      try {
+        // encodeURIComponent + unescape trick = safe btoa() for non-ASCII chars too.
+        const safe = unescape(encodeURIComponent(video.directVideoUrl));
+        const b64 = btoa(safe);
+        return `/v/?id=b64_${b64}`;
+      } catch (e) {
+        console.warn('[Generator] Failed to base64-encode source URL, falling back to plain id:', e);
+        return `/v/?id=${encodeURIComponent(video.id)}`;
+      }
+    }
+
     function displayGeneratedResult(video) {
       const resultBox = document.getElementById('generator-result');
       const urlText = document.getElementById('result-player-url');
@@ -829,7 +865,10 @@
       const codeSnippet = document.getElementById('result-code-snippet');
       const livePlayerBox = document.getElementById('live-player-preview-box');
 
-      const relativePlayerUrl = `/v/?id=${encodeURIComponent(video.id)}`;
+      // Use the smart path builder so the displayed URL, the play button,
+      // the published-player-link, AND the copy button all produce a working
+      // player URL regardless of source type (YouTube vs CDN).
+      const relativePlayerUrl = buildPlayerPath(video);
 
       idBadge.textContent = `ID: ${video.id}`;
       urlText.textContent = relativePlayerUrl;
@@ -935,11 +974,10 @@
     // Copy player link
     document.getElementById('copy-player-link-btn').addEventListener('click', () => {
       if (!currentGeneratedVideo) return;
-      // Player page lives at the site root: https://twig.biz.id/v/?id=...
-      // (NOT /g/v/ — the /g/ directory is just the generator studio).
-      const rawUrl = `${window.location.origin}/v/?id=${encodeURIComponent(currentGeneratedVideo.id)}`;
-      // Defensive: collapse any accidental double slashes (// or ///) into a
-      // single slash, but preserve the "://" right after the protocol.
+      // Build the correct player path (b64-encoded for CDN, plain id for YouTube)
+      // and prepend the site origin. The defensive replace collapses any
+      // accidental // -> / (keeping the :// after the protocol intact).
+      const rawUrl = `${window.location.origin}${buildPlayerPath(currentGeneratedVideo)}`;
       const playerUrl = rawUrl.replace(/([^:])\/{2,}/g, '$1/');
       navigator.clipboard.writeText(playerUrl).then(() => {
         if (window.showToast) window.showToast('Tautan Pemutar Berhasil Disalin!');

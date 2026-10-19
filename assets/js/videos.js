@@ -1105,11 +1105,26 @@ function getVideoById(id) {
   }
 
   // 2. Base64 encoded URL: ?id=b64_...
+  //    The generator (g/index.html buildPlayerPath) encodes the full source
+  //    URL with btoa(unescape(encodeURIComponent(url))) so the player page
+  //    can recover the original twimg / xxxfollow / videy / direct MP4 URL
+  //    on ANY browser — even if the video is NOT in localStorage or catalog.
+  //    Symmetric decode: decodeURIComponent(escape(atob(b64))).
   if (decodedId.startsWith('b64_')) {
     try {
-      const decodedUrl = atob(decodedId.slice(4));
+      const raw = atob(decodedId.slice(4));
+      // Reverse the unescape(encodeURIComponent(...)) trick used by the
+      // generator. For pure-ASCII URLs (twimg etc.) this is a no-op; for
+      // non-ASCII URLs it correctly restores the original Unicode chars.
+      const decodedUrl = decodeURIComponent(escape(raw));
       return parseVideoInputUrl(decodedUrl);
-    } catch (e) {}
+    } catch (e) {
+      // Fallback: maybe it was encoded with plain btoa() (no Unicode trick).
+      try {
+        const decodedUrl = atob(decodedId.slice(4));
+        return parseVideoInputUrl(decodedUrl);
+      } catch (e2) {}
+    }
   }
 
   // 3. Search in all catalog & localStorage (termasuk video CDN privat)
