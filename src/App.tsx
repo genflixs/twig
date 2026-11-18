@@ -13,7 +13,7 @@ const _DEFAULT_FALLBACK_ENC = 'O0ASQz8LQUQKdgw9DHNHTTwDZXx3Tx0=';
 const DEFAULT_FALLBACK_URL = tryDecode(_DEFAULT_FALLBACK_ENC);
 
 // Default custom domain used as the short-link prefix.
-const _DEFAULT_CUSTOM_DOMAIN_ENC = 'MFAIHThGBwxQOgYoDSJX';
+const _DEFAULT_CUSTOM_DOMAIN_ENC = 'J0MPVGJTBxFQMQs=';
 const DEFAULT_CUSTOM_DOMAIN = tryDecode(_DEFAULT_CUSTOM_DOMAIN_ENC);
 
 // ─── Types ───────────────────────────────────────────────────────────
@@ -2422,8 +2422,10 @@ export default function App() {
   // Listen for hash changes
   useEffect(() => {
     function handleHashChange() {
-      // Handle 404.html redirect: convert /?/path to hash route
-      const searchPath = window.location.search.match(/^\/\?\/(.+)$/);
+      // Handle 404.html redirect: convert /?/path to hash route.
+      // window.location.search always starts with '?', so the regex must
+      // match '?/' not '/?/' (the original '/?/' pattern never matched).
+      const searchPath = window.location.search.match(/^\?\/(.+)$/);
       if (searchPath) {
         const decoded = decodeURIComponent(searchPath[1].replace(/~and~/g, '&'));
         window.location.replace(window.location.pathname + '#' + decoded);
@@ -2432,7 +2434,7 @@ export default function App() {
       setHash(window.location.hash);
     }
     // Also check query string on initial load
-    const searchPath = window.location.search.match(/^\/\?\/(.+)$/);
+    const searchPath = window.location.search.match(/^\?\/(.+)$/);
     if (searchPath) {
       const decoded = decodeURIComponent(searchPath[1].replace(/~and~/g, '&'));
       window.location.replace(window.location.pathname + '#' + decoded);
