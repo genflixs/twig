@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#030712" />
+
+    <meta property="og:title" content="SafeLink" />
+    <meta property="og:description" content="SafeLink - Protected URL Shortener" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <meta name="googlebot" content="noindex,nofollow" />
+
+    <!-- CSP: connect-src allows any https origin so the internally-resolved
+         endpoint (decoded at runtime) can be reached without leaking the
+         host in the HTML source. -->
+<meta http-equiv="Content-Security-Policy"
+content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; connect-src 'self' https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://picsum.photos https://api.qrserver.com; base-uri 'self'; form-action 'self';">
+
+    <title>SafeLink - URL Shortener</title>
+
+    <style>
+      body {
+        background-color: #030712;
+        margin: 0;
+      }
+    </style>
+
+    <script>
+      // Automatically update canonical social URL to the current domain.
+      document.addEventListener("DOMContentLoaded", function () {
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) {
+          ogUrl.setAttribute("content", window.location.origin);
+        }
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
