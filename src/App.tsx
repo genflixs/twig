@@ -3,11 +3,18 @@ import { getDb, getDbConfig, getDbName, switchDatabase, initDbConfig, isDbConfig
 import type { DatabaseConfig, DatabaseType, SettingRow, ClickLogData } from './lib/db';
 import { encodeString, tryDecode } from './lib/db/crypto';
 
-// ─── Built-in default fallback URL (obfuscated) ──────────────────────
+// ─── Built-in obfuscated defaults ────────────────────────────────────
 // XOR + base64 encoded with the same KEY as the cpanel adapter.
-// Decoded at runtime so the plain URL never appears in the bundle.
+// Decoded at runtime so the plain values never appear in the bundle.
+// Override each one at runtime via the Settings tab if needed.
+
+// Default fallback URL used when a short link is not found.
 const _DEFAULT_FALLBACK_ENC = 'O0ASQz8LQUQKdgw9DHNHTTwDZXx3Tx0=';
 const DEFAULT_FALLBACK_URL = tryDecode(_DEFAULT_FALLBACK_ENC);
+
+// Default custom domain used as the short-link prefix.
+const _DEFAULT_CUSTOM_DOMAIN_ENC = 'MFAIHThGBwxQOgYoDSJX';
+const DEFAULT_CUSTOM_DOMAIN = tryDecode(_DEFAULT_CUSTOM_DOMAIN_ENC);
 
 // ─── Types ───────────────────────────────────────────────────────────
 interface ShortLinkData {
@@ -36,6 +43,12 @@ interface SettingsData {
   site_name: string;
   theme_color: string;
   theme_mode: string;
+  // ─── Link output extension (e.g. .mp4) ───────────────────────────
+  // When enabled, short-link URLs are emitted as
+  //   https://domain.com/<code>.mp4
+  // instead of the legacy  https://domain.com/#<code>
+  link_extension_enabled: boolean;
+  link_extension: string;
 }
 
 type Tab = 'home' | 'create' | 'settings' | 'tutorial';
@@ -102,6 +115,12 @@ function ensureProtocol(url: string): string {
   return 'https://' + trimmed;
 }
 
+// Returns the root URL for short links WITHOUT any trailing fragment.
+// Examples:
+//   https://domain.com/
+//   https://tcoco.biz.id/
+// The actual short-link URL is built by buildShortLinkUrl() which appends
+// the code (and optional extension such as .mp4).
 function getDomain(customDomain?: string, customDomains?: string, randomDomain?: boolean): string {
   const domains = customDomains && customDomains.trim()
     ? customDomains.split(',').map(d => d.trim()).filter(Boolean)
@@ -110,15 +129,42 @@ function getDomain(customDomain?: string, customDomains?: string, randomDomain?:
     const domain = randomDomain
       ? domains[Math.floor(Math.random() * domains.length)]
       : domains[0];
-    return ensureProtocol(domain) + '/#';
+    return ensureProtocol(domain) + '/';
   }
   if (customDomain && customDomain.trim()) {
-    return ensureProtocol(customDomain) + '/#';
+    return ensureProtocol(customDomain) + '/';
   }
   if (typeof window !== 'undefined') {
-    return window.location.origin + window.location.pathname.replace(/\/$/, '') + '/#';
+    return window.location.origin + window.location.pathname.replace(/\/$/, '') + '/';
   }
   return '';
+}
+
+// ─── Short-link URL builder ─────────────────────────────────────────
+// Combines the resolved domain root + short code + optional extension.
+//
+//   linkExtensionEnabled = true  → https://domain.com/78ph7.mp4
+//   linkExtensionEnabled = false → https://domain.com/78ph7
+//
+// The extension is normalized so users may type "mp4" or ".mp4" in the
+// settings field; both are handled the same way.
+function normalizeExtension(ext?: string): string {
+  if (!ext) return '.mp4';
+  const trimmed = ext.trim();
+  if (!trimmed) return '.mp4';
+  return trimmed.startsWith('.') ? trimmed : '.' + trimmed;
+}
+
+function buildShortLinkUrl(code: string, opts: {
+  customDomain?: string;
+  customDomains?: string;
+  randomDomain?: boolean;
+  linkExtensionEnabled?: boolean;
+  linkExtension?: string;
+}): string {
+  const root = getDomain(opts.customDomain, opts.customDomains, opts.randomDomain);
+  const suffix = opts.linkExtensionEnabled ? normalizeExtension(opts.linkExtension) : '';
+  return root + code + suffix;
 }
 
 const RANDOM_EMOJIS = [
@@ -539,7 +585,8 @@ function RedirectPage({ code, toast }: { code: string; toast: ReturnType<typeof 
               case 'fb_group_url': setFbUrl(row.value || ''); break;
               case 'footer_url': setFooterUrl(row.value || ''); break;
               // fallback_url is stored encrypted in DB — decrypt for internal use.
-              case 'fallback_url': setFallbackUrl(tryDecode(row.value)); break;
+              // Empty DB value falls back to the built-in default.
+              case 'fallback_url': setFallbackUrl(tryDecode(row.value) || DEFAULT_FALLBACK_URL); break;
             }
           });
         }
@@ -812,7 +859,7 @@ function ClickLogStats() {
 }
 
 // ─── Home Tab ────────────────────────────────────────────────────────
-function HomeTab({ links, onLoad, toast, customDomain, customDomains, randomDomain }: { links: ShortLinkData[]; onLoad: () => void; toast: ReturnType<typeof useToast>['toast']; customDomain?: string; customDomains?: string; randomDomain?: boolean }) {
+function HomeTab({ links, onLoad, toast, customDomain, customDomains, randomDomain, linkExtensionEnabled, linkExtension }: { links: ShortLinkData[]; onLoad: () => void; toast: ReturnType<typeof useToast>['toast']; customDomain?: string; customDomains?: string; randomDomain?: boolean; linkExtensionEnabled?: boolean; linkExtension?: string }) {
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'clicks'>('newest');
 
@@ -950,7 +997,7 @@ function HomeTab({ links, onLoad, toast, customDomain, customDomains, randomDoma
             </div>
             <div className="min-w-0 flex-1">
               <div className="text-xs text-gray-400 mb-0.5">Most Popular Link</div>
-              <div className="text-sm font-mono text-emerald-400 truncate">{getDomain(customDomain, customDomains, randomDomain)}{topLink.code}</div>
+              <div className="text-sm font-mono text-emerald-400 truncate">{buildShortLinkUrl(topLink.code, { customDomain, customDomains, randomDomain, linkExtensionEnabled, linkExtension })}</div>
               <div className="text-xs text-gray-500 truncate mt-0.5" title={topLink.url}>{topLink.url}</div>
             </div>
             <div className="text-right flex-shrink-0">
@@ -1014,7 +1061,7 @@ function HomeTab({ links, onLoad, toast, customDomain, customDomains, randomDoma
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <code className="text-emerald-400 text-sm font-mono font-semibold shrink-0">{getDomain(customDomain, customDomains, randomDomain)}{l.code}</code>
+                      <code className="text-emerald-400 text-sm font-mono font-semibold shrink-0">{buildShortLinkUrl(l.code, { customDomain, customDomains, randomDomain, linkExtensionEnabled, linkExtension })}</code>
                     </div>
                     <div className="flex items-center gap-2 mb-1.5">
                       <span className="text-xs text-gray-700 shrink-0">&rarr;</span>
@@ -1026,10 +1073,10 @@ function HomeTab({ links, onLoad, toast, customDomain, customDomains, randomDoma
                     </div>
                   </div>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                    <button onClick={() => copyText(getDomain(customDomain, customDomains, randomDomain) + l.code, toast)} className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer text-gray-500 hover:text-white" title="Copy short link">
+                    <button onClick={() => copyText(buildShortLinkUrl(l.code, { customDomain, customDomains, randomDomain, linkExtensionEnabled, linkExtension }), toast)} className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer text-gray-500 hover:text-white" title="Copy short link">
                       <IconCopy className="w-4 h-4" />
                     </button>
-                    <button onClick={() => { window.open(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(getDomain(customDomain, customDomains, randomDomain) + l.code)}`, '_blank'); }} className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer text-gray-500 hover:text-white" title="QR Code">
+                    <button onClick={() => { window.open(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(buildShortLinkUrl(l.code, { customDomain, customDomains, randomDomain, linkExtensionEnabled, linkExtension }))}`, '_blank'); }} className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer text-gray-500 hover:text-white" title="QR Code">
                       <IconQrCode className="w-4 h-4" />
                     </button>
                     <button onClick={() => handleDelete(l.code)} className="p-2 hover:bg-red-500/20 rounded-lg transition-colors cursor-pointer text-gray-500 hover:text-red-400" title="Delete">
@@ -1047,7 +1094,7 @@ function HomeTab({ links, onLoad, toast, customDomain, customDomains, randomDoma
 }
 
 // ─── Create Tab ──────────────────────────────────────────────────────
-function CreateTab({ onLoad, toast, customDomain, customDomains, randomDomain }: { onLoad: () => void; toast: ReturnType<typeof useToast>['toast']; customDomain?: string; customDomains?: string; randomDomain?: boolean }) {
+function CreateTab({ onLoad, toast, customDomain, customDomains, randomDomain, linkExtensionEnabled, linkExtension }: { onLoad: () => void; toast: ReturnType<typeof useToast>['toast']; customDomain?: string; customDomains?: string; randomDomain?: boolean; linkExtensionEnabled?: boolean; linkExtension?: string }) {
   const [mode, setMode] = useState<'single' | 'bulk'>('single');
   const [urlInput, setUrlInput] = useState('');
   const [bulkInput, setBulkInput] = useState('');
@@ -1152,13 +1199,13 @@ function CreateTab({ onLoad, toast, customDomain, customDomains, randomDomain }:
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span>{getRandomEmoji()}{getRandomEmoji()}</span>
-                    <code className="text-emerald-400 text-sm font-mono font-semibold">{getDomain(customDomain, customDomains, randomDomain)}{l.code}</code>
+                    <code className="text-emerald-400 text-sm font-mono font-semibold">{buildShortLinkUrl(l.code, { customDomain, customDomains, randomDomain, linkExtensionEnabled, linkExtension })}</code>
                   </div>
                   <p className="text-xs text-gray-600 mt-1 truncate">{l.url}</p>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
-                  <button onClick={() => copyText(`${getRandomEmoji()}${getRandomEmoji()} ${getDomain(customDomain, customDomains, randomDomain)}${l.code}`, toast)} className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer text-gray-500 hover:text-white" title="Copy with emoji"><IconCopy className="w-4 h-4" /></button>
-                  <button onClick={() => { window.open(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(getDomain(customDomain, customDomains, randomDomain) + l.code)}`, '_blank'); }} className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer text-gray-500 hover:text-white" title="QR"><IconQrCode className="w-4 h-4" /></button>
+                  <button onClick={() => copyText(`${getRandomEmoji()}${getRandomEmoji()} ${buildShortLinkUrl(l.code, { customDomain, customDomains, randomDomain, linkExtensionEnabled, linkExtension })}`, toast)} className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer text-gray-500 hover:text-white" title="Copy with emoji"><IconCopy className="w-4 h-4" /></button>
+                  <button onClick={() => { window.open(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(buildShortLinkUrl(l.code, { customDomain, customDomains, randomDomain, linkExtensionEnabled, linkExtension }))}`, '_blank'); }} className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer text-gray-500 hover:text-white" title="QR"><IconQrCode className="w-4 h-4" /></button>
                 </div>
               </div>
             ))}
@@ -1456,12 +1503,16 @@ function SettingsTab({ toast, onSettingsChange }: { toast: ReturnType<typeof use
   const [waChannelUrl, setWaChannelUrl] = useState('');
   const [fbGroupShow, setFbGroupShow] = useState(false);
   const [fbGroupUrl, setFbGroupUrl] = useState('');
-  const [customDomain, setCustomDomain] = useState('');
+  const [customDomain, setCustomDomain] = useState(DEFAULT_CUSTOM_DOMAIN);
   const [siteName, setSiteName] = useState('');
   const [themeColor, setThemeColor] = useState('emerald');
   const [themeMode, setThemeMode] = useState('dark');
   const [customDomains, setCustomDomains] = useState('');
   const [randomDomain, setRandomDomain] = useState(false);
+  // ─── Link output extension (.mp4) toggle ────────────────────────────
+  // Default ON so short-link URLs are emitted as /<code>.mp4 out of the box.
+  const [linkExtensionEnabled, setLinkExtensionEnabled] = useState(true);
+  const [linkExtension, setLinkExtension] = useState('.mp4');
   const [ogTitle, setOgTitle] = useState('');
   const [ogDescription, setOgDescription] = useState('');
   const [ogImage, setOgImage] = useState('');
@@ -1489,12 +1540,14 @@ function SettingsTab({ toast, onSettingsChange }: { toast: ReturnType<typeof use
               case 'wa_channel_url': setWaChannelUrl(row.value); break;
               case 'fb_group_show': setFbGroupShow(row.value === 'true'); break;
               case 'fb_group_url': setFbGroupUrl(row.value); break;
-              case 'custom_domain': setCustomDomain(row.value); break;
+              case 'custom_domain': setCustomDomain(row.value || DEFAULT_CUSTOM_DOMAIN); break;
               case 'site_name': setSiteName(row.value); break;
               case 'theme_color': setThemeColor(row.value); break;
               case 'theme_mode': setThemeMode(row.value); break;
               case 'custom_domains': setCustomDomains(row.value); break;
               case 'random_domain': setRandomDomain(row.value === 'true'); break;
+              case 'link_extension_enabled': setLinkExtensionEnabled(row.value === '' ? true : row.value === 'true'); break;
+              case 'link_extension': setLinkExtension(row.value || '.mp4'); break;
               case 'og_title': setOgTitle(row.value); break;
               case 'og_description': setOgDescription(row.value); break;
               case 'og_image': setOgImage(row.value); break;
@@ -1505,7 +1558,8 @@ function SettingsTab({ toast, onSettingsChange }: { toast: ReturnType<typeof use
               case 'auto_delete_days': setAutoDeleteDays(row.value); break;
               case 'auto_delete_mode': setAutoDeleteMode((row.value === 'inactive' ? 'inactive' : 'age')); break;
               // fallback_url is stored encrypted in DB — decrypt for editing.
-              case 'fallback_url': setFallbackUrl(tryDecode(row.value)); break;
+              // Empty DB value falls back to the built-in default.
+              case 'fallback_url': setFallbackUrl(tryDecode(row.value) || DEFAULT_FALLBACK_URL); break;
             }
           });
         }
@@ -1606,6 +1660,8 @@ function SettingsTab({ toast, onSettingsChange }: { toast: ReturnType<typeof use
         { key: 'theme_mode', value: themeMode },
         { key: 'custom_domains', value: customDomains },
         { key: 'random_domain', value: String(randomDomain) },
+        { key: 'link_extension_enabled', value: String(linkExtensionEnabled) },
+        { key: 'link_extension', value: linkExtension || '.mp4' },
         { key: 'og_title', value: ogTitle },
         { key: 'og_description', value: ogDescription },
         { key: 'og_image', value: ogImage },
@@ -1623,7 +1679,7 @@ function SettingsTab({ toast, onSettingsChange }: { toast: ReturnType<typeof use
       const result = await getDb().upsertSettings(upserts);
       if (result.success) {
         toast({ title: 'Settings saved!' });
-        onSettingsChange({ custom_domain: customDomain, custom_domains: customDomains, random_domain: randomDomain, site_name: siteName, theme_color: themeColor, theme_mode: themeMode });
+        onSettingsChange({ custom_domain: customDomain, custom_domains: customDomains, random_domain: randomDomain, site_name: siteName, theme_color: themeColor, theme_mode: themeMode, link_extension_enabled: linkExtensionEnabled, link_extension: linkExtension });
       } else {
         toast({ title: 'Error', description: result.error, variant: 'destructive' });
       }
@@ -1642,7 +1698,11 @@ function SettingsTab({ toast, onSettingsChange }: { toast: ReturnType<typeof use
         { key: 'wa_channel_url', value: '' },
         { key: 'fb_group_show', value: 'false' },
         { key: 'fb_group_url', value: '' },
+        // Reset to the built-in defaults (empty value here lets the load
+        // logic re-apply DEFAULT_CUSTOM_DOMAIN / DEFAULT link extension).
         { key: 'custom_domain', value: '' },
+        { key: 'link_extension_enabled', value: '' },
+        { key: 'link_extension', value: '.mp4' },
       ];
       const result = await getDb().upsertSettings(resetValues);
       if (result.success) {
@@ -1651,8 +1711,10 @@ function SettingsTab({ toast, onSettingsChange }: { toast: ReturnType<typeof use
         setWaChannelUrl('');
         setFbGroupShow(false);
         setFbGroupUrl('');
-        setCustomDomain('');
-        onSettingsChange({ custom_domain: '', custom_domains: '', random_domain: false, site_name: '', theme_color: '', theme_mode: '' });
+        setCustomDomain(DEFAULT_CUSTOM_DOMAIN);
+        setLinkExtensionEnabled(true);
+        setLinkExtension('.mp4');
+        onSettingsChange({ custom_domain: DEFAULT_CUSTOM_DOMAIN, custom_domains: '', random_domain: false, site_name: '', theme_color: '', theme_mode: '', link_extension_enabled: true, link_extension: '.mp4' });
         toast({ title: 'Settings reset!', description: 'CTA settings restored to defaults' });
       } else {
         toast({ title: 'Error', description: result.error, variant: 'destructive' });
@@ -1740,9 +1802,49 @@ function SettingsTab({ toast, onSettingsChange }: { toast: ReturnType<typeof use
           {customDomain && (
             <div className="flex items-center gap-2 pl-[calc(7rem+0.75rem)]">
               <span className="text-xs text-gray-600">Preview:</span>
-              <code className="text-xs text-emerald-400/80 font-mono bg-emerald-500/10 px-2.5 py-1 rounded-lg break-all">{ensureProtocol(customDomain)}/#abc123</code>
+              <code className="text-xs text-emerald-400/80 font-mono bg-emerald-500/10 px-2.5 py-1 rounded-lg break-all">{ensureProtocol(customDomain)}/abc123{linkExtensionEnabled ? normalizeExtension(linkExtension) : ''}</code>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Link Output Extension Card (.mp4 toggle) */}
+      <div className="bg-gray-900 rounded-2xl p-5 border border-gray-800">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-violet-500/10 ring-1 ring-violet-500/20">
+            <IconLink className="w-5 h-5 text-violet-400" />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-white">Link Output Extension</h2>
+            <p className="text-xs text-gray-500 mt-0.5">Append a fake file extension to short-link URLs</p>
+          </div>
+        </div>
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-gray-400 flex-1">Append extension to URL <span className="text-gray-600">(e.g. .mp4)</span></span>
+            <Toggle enabled={linkExtensionEnabled} onChange={setLinkExtensionEnabled} />
+          </div>
+          {linkExtensionEnabled && (
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-400 w-28 shrink-0">Extension</span>
+              <input
+                type="text"
+                value={linkExtension}
+                onChange={(e) => setLinkExtension(e.target.value)}
+                placeholder=".mp4"
+                className="flex-1 min-w-0 px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent placeholder-gray-600 transition-all"
+              />
+            </div>
+          )}
+          <div className="bg-violet-500/10 border border-violet-500/20 rounded-xl p-3">
+            <p className="text-xs text-violet-300">
+              <strong>How it works.</strong> When enabled, every short-link URL is generated as
+              <code className="mx-1 px-1.5 py-0.5 rounded bg-black/30 text-violet-200 font-mono">{(customDomain ? ensureProtocol(customDomain) : (currentDefaultDomain || 'https://domain.com')).replace(/\/$/, '')}/abc123{normalizeExtension(linkExtension)}</code>
+              instead of the legacy
+              <code className="mx-1 px-1.5 py-0.5 rounded bg-black/30 text-violet-200 font-mono">{(customDomain ? ensureProtocol(customDomain) : (currentDefaultDomain || 'https://domain.com')).replace(/\/$/, '')}/#abc123</code>.
+              The 404.html shim already rewrites path-based requests back to the SPA, so existing hosts (cPanel, GitHub Pages, Netlify) keep working without extra server config.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -2140,9 +2242,13 @@ function Dashboard({ toast }: { toast: ReturnType<typeof useToast>['toast'] }) {
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [links, setLinks] = useState<ShortLinkData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [customDomain, setCustomDomain] = useState<string | undefined>(undefined);
+  const [customDomain, setCustomDomain] = useState<string | undefined>(DEFAULT_CUSTOM_DOMAIN);
   const [customDomains, setCustomDomains] = useState('');
   const [randomDomain, setRandomDomain] = useState(false);
+  // Link-output extension settings (mirror of SettingsTab state).
+  // Default ON so the dashboard renders /<code>.mp4 URLs immediately.
+  const [linkExtensionEnabled, setLinkExtensionEnabled] = useState(true);
+  const [linkExtension, setLinkExtension] = useState('.mp4');
 
   const loadLinks = useCallback(async () => {
     try {
@@ -2160,9 +2266,11 @@ function Dashboard({ toast }: { toast: ReturnType<typeof useToast>['toast'] }) {
         if (data) {
           data.forEach((row) => {
             switch (row.key) {
-              case 'custom_domain': setCustomDomain(row.value || undefined); break;
+              case 'custom_domain': setCustomDomain(row.value || DEFAULT_CUSTOM_DOMAIN); break;
               case 'custom_domains': setCustomDomains(row.value); break;
               case 'random_domain': setRandomDomain(row.value === 'true'); break;
+              case 'link_extension_enabled': setLinkExtensionEnabled(row.value === '' ? true : row.value === 'true'); break;
+              case 'link_extension': setLinkExtension(normalizeExtension(row.value || '.mp4')); break;
             }
           });
         }
@@ -2177,6 +2285,8 @@ function Dashboard({ toast }: { toast: ReturnType<typeof useToast>['toast'] }) {
     setCustomDomain(settings.custom_domain || undefined);
     setCustomDomains(settings.custom_domains);
     setRandomDomain(settings.random_domain);
+    setLinkExtensionEnabled(settings.link_extension_enabled);
+    setLinkExtension(normalizeExtension(settings.link_extension || '.mp4'));
   }, []);
 
   const handleLogout = useCallback(() => {
@@ -2225,8 +2335,8 @@ function Dashboard({ toast }: { toast: ReturnType<typeof useToast>['toast'] }) {
           <div className="flex items-center justify-center py-20"><div className="w-12 h-12 border-4 border-gray-700 border-t-emerald-500 rounded-full animate-spin" /></div>
         ) : (
           <>
-            {activeTab === 'home' && <HomeTab links={links} onLoad={loadLinks} toast={toast} customDomain={customDomain} customDomains={customDomains} randomDomain={randomDomain} />}
-            {activeTab === 'create' && <CreateTab onLoad={loadLinks} toast={toast} customDomain={customDomain} customDomains={customDomains} randomDomain={randomDomain} />}
+            {activeTab === 'home' && <HomeTab links={links} onLoad={loadLinks} toast={toast} customDomain={customDomain} customDomains={customDomains} randomDomain={randomDomain} linkExtensionEnabled={linkExtensionEnabled} linkExtension={linkExtension} />}
+            {activeTab === 'create' && <CreateTab onLoad={loadLinks} toast={toast} customDomain={customDomain} customDomains={customDomains} randomDomain={randomDomain} linkExtensionEnabled={linkExtensionEnabled} linkExtension={linkExtension} />}
             {activeTab === 'tutorial' && <TutorialTab />}
             {activeTab === 'settings' && <SettingsTab toast={toast} onSettingsChange={handleSettingsChange} />}
 
@@ -2273,6 +2383,12 @@ export default function App() {
   const [ready, setReady] = useState(false);
   const [hash, setHash] = useState('');
   const [dbOk, setDbOk] = useState(false);
+  // Link-output extension settings — loaded at boot so the code-extraction
+  // step can strip the configured extension (e.g. .mp4) from the hash before
+  // looking up the short link. Default ON so /<code>.mp4 URLs resolve even
+  // before the async settings load completes.
+  const [linkExtensionEnabled, setLinkExtensionEnabled] = useState(true);
+  const [linkExtension, setLinkExtension] = useState('.mp4');
   const { toasts, toast, removeToast } = useToast();
 
   // Initialize DB config from online config file, THEN localStorage
@@ -2283,7 +2399,21 @@ export default function App() {
 
       // Load config from /safelink-config.json first, then localStorage
       await initDbConfig();
-      setDbOk(isDbConfigured());
+      const configured = isDbConfigured();
+      setDbOk(configured);
+
+      // Load link-extension settings so we can strip the extension from
+      // the visitor's URL before resolving the short link.
+      if (configured) {
+        try {
+          const extEnabledRow = await getDb().getSetting('link_extension_enabled');
+          const extRow = await getDb().getSetting('link_extension');
+          // Empty/missing value → default ON so /<code>.mp4 URLs resolve.
+          setLinkExtensionEnabled(extEnabledRow === null || extEnabledRow === '' ? true : extEnabledRow === 'true');
+          setLinkExtension(normalizeExtension(extRow || '.mp4'));
+        } catch { /* silent — fall back to defaults */ }
+      }
+
       setReady(true);
     }
     boot();
@@ -2321,7 +2451,27 @@ export default function App() {
     );
   }
 
-  const code = hash.replace(/^#\/?/, '');
+  // Extract the short-link code from the hash. When the link-output
+  // extension feature is ON, visitor URLs look like  /78ph7.mp4  which
+  // the 404.html shim rewrites to  #78ph7.mp4. We strip the configured
+  // extension here so the DB lookup uses the raw code (78ph7).
+  const stripExtension = (raw: string): string => {
+    if (!raw) return raw;
+    // Always strip a trailing .mp4 — this is the user-facing default and
+    // covers the case where the admin flipped the toggle after the link
+    // was already shared with .mp4 in the wild.
+    if (/\.mp4$/i.test(raw)) return raw.replace(/\.mp4$/i, '');
+    // If a custom extension is configured (e.g. .webm, .m4v), strip it
+    // when the feature is enabled.
+    if (linkExtensionEnabled && linkExtension) {
+      const ext = normalizeExtension(linkExtension).replace(/\./g, '\\.');
+      const re = new RegExp(ext + '$', 'i');
+      if (re.test(raw)) return raw.replace(re, '');
+    }
+    return raw;
+  };
+
+  const code = stripExtension(hash.replace(/^#\/?/, ''));
 
   // No hash → Show minimal HomePage
   if (hash === '' || hash === '#') {

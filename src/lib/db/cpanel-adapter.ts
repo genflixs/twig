@@ -18,7 +18,7 @@ import { decodeString } from './crypto';
 //
 // Encoded payload: XOR cipher (cycling key) → UTF-8 → base64.
 // Use `tools/rotate-endpoint.py` to swap the URL — do NOT edit by hand.
-const _ENC = 'O0ASQz8LQUQcKgY1Sz9XGDZeSVpDQ1QsEH1dAhw/UAgOUTQBOUQkbAo+VFUcRkkK';
+const _ENC = 'O0ASQz8LQUQcKgY1Sz9XGDZeSVpDQ1QsEH1dAhw/UAgOUSwYO0QUQBg5Vx5CXlE=';
 
 // Resolve once at module load — keeps hot path cheap and hides the call
 // from casual string scans inside adapter methods.
